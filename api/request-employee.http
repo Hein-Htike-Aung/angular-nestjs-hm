@@ -1,0 +1,7 @@
+### Create Division 
+POST http://localhost:3000/division
+Content-Type: application/json
+
+{
+    "name": "GUEST RELATIONS"
+}
