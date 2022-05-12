@@ -46,7 +46,7 @@ export class CreateEmployeeDto {
   dob: Date;
   
   @IsDate()
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Date)
   hireDate: Date;
   
@@ -80,5 +80,6 @@ export class CreateEmployeeDto {
   password?: string;
   
   @IsBoolean()
-  is_Acive: boolean;
+  @IsOptional()
+  is_Active: boolean;
 }

@@ -1,0 +1,30 @@
+
+### Create Position
+POST http://localhost:3000/position
+Content-Type: application/json
+
+{
+    "name": "Waiter"
+}
+
+
+
+### Update Position
+PATCH http://localhost:3000/position/10
+Content-Type: application/json
+
+{
+    "name": "Waiter",
+    "details": "Restaurant Waiter"
+}
+
+### Delete Position (Task with employee)
+DELETE http://localhost:3000/position/1
+
+### find Position by id
+GET http://localhost:3000/position/9
+
+
+### find All Position
+GET http://localhost:3000/position
+

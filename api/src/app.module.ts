@@ -1,4 +1,4 @@
-import { AllExceptionFilter } from './shared/filters/all-exception.filter';
+// import { AllExceptionFilter } from './shared/filters/all-exception.filter';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,6 +25,6 @@ import { APP_FILTER } from '@nestjs/core';
     EmployeeModule,
     AuthModule,
   ],
-  providers: [{ provide: APP_FILTER, useClass: AllExceptionFilter }],
+  // providers: [{ provide: APP_FILTER, useClass: AllExceptionFilter }],
 })
 export class AppModule {}

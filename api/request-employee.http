@@ -1,7 +1,17 @@
-### Create Division 
-POST http://localhost:3000/division
+### Create Employee
+POST http://localhost:3000/employee
 Content-Type: application/json
 
 {
-    "name": "GUEST RELATIONS"
+    "name": "john3",
+    "familyMember": ["Xiaoting", "Mike"],
+    "contact": {
+        "phone": "092332323",
+        "email": "john3@gmial.com"
+    },
+    "dob": "2000-12-12",
+    "gender": "MALE",
+    "positionId": 9,
+    "subDivisonid": 11,
+    "role": "ADMIN"
 }

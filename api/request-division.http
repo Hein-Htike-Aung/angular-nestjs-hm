@@ -1,0 +1,57 @@
+### Create Division 
+POST http://localhost:3000/division
+Content-Type: application/json
+
+{
+    "name": "GUEST RELATIONS"
+}
+
+
+### Update Division
+PATCH http://localhost:3000/division/6
+Content-Type: application/json
+
+{
+    "name": "Updated Division"
+}
+
+
+### find Division By id
+GET http://localhost:3000/division/3
+
+
+### delete Division (Task with subdivision)
+DELETE http://localhost:3000/division/6
+
+
+### Create SubDivision 
+POST http://localhost:3000/division/subdivision
+Content-Type: application/json
+
+{
+    "name": "(IT) Department",
+    "divisionId": 3
+}
+
+### Update SubDivision 
+PATCH http://localhost:3000/division/subdivision/13
+Content-Type: application/json
+
+{
+    "name": "Updated Department",
+    "divisionId": 1
+}
+
+### find SubDivision By id
+GET http://localhost:3000/division/subdivision/11
+
+### Get all Divisions
+GET http://localhost:3000/division
+
+### Get all Sub Divisions
+GET http://localhost:3000/division/subdivisions/list
+
+
+### Delete subDivision by id (Task with employee id)
+DELETE http://localhost:3000/division/subdivision/12
+

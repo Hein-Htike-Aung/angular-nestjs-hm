@@ -3,6 +3,7 @@ import { SubDivision } from './subDivision.entity';
 import { Position } from './position.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -34,7 +35,7 @@ export class Employee {
   @Column({ type: 'date' }) // timestamp in date
   dob: Date;
 
-  @Column() // timestamp in postgres
+  @CreateDateColumn() // timestamp in postgres
   hireDate: Date;
 
   @Column({ type: 'enum', enum: GENDER })
@@ -51,16 +52,15 @@ export class Employee {
   @Column({ nullable: true })
   image: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true, unique: true })
   username: string;
 
-  @Column({select: false, nullable: true})
+  @Column({ select: false, nullable: true })
   password: string;
 
   @Column({ type: 'enum', enum: ROlE, default: ROlE.USER })
   role: ROlE;
 
-  @Column({ type: 'bool', name: 'actvie', default: true })
-  @Column({ name: 'actvie', default: true })
+  @Column({ type: 'bool', name: 'active', default: true })
   is_active: boolean;
 }
