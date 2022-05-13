@@ -18,8 +18,8 @@ Content-Type: application/json
     "details": "Restaurant Waiter"
 }
 
-### Delete Position (Task with employee)
-DELETE http://localhost:3000/position/1
+### Delete Position
+DELETE http://localhost:3000/position/9
 
 ### find Position by id
 GET http://localhost:3000/position/9

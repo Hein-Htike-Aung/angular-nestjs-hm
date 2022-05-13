@@ -1,15 +1,19 @@
-import { UpdateSubDivisionDto } from './../models/dto/update-subdivision.dto';
-import { create } from 'domain';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef, Inject,
+  Injectable
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { catchError, from, map, Observable, of, switchMap, take } from 'rxjs';
-import { QueryFailedError, Repository, UpdateResult } from 'typeorm';
+import { catchError, from, map, Observable, switchMap, take } from 'rxjs';
+import { Repository, UpdateResult } from 'typeorm';
+import { Employee } from '../models/entities/employee.entity';
+import { ErrorHandler } from './../../shared/utils/error.handler';
 import { CreateDivisionDto } from './../models/dto/create-division.dto';
 import { CreateSubDivisionDto } from './../models/dto/create-subdivision.dto';
 import { UpdateDivisionDto } from './../models/dto/update-division.dto';
+import { UpdateSubDivisionDto } from './../models/dto/update-subdivision.dto';
 import { Division } from './../models/entities/division.entity';
 import { SubDivision } from './../models/entities/subDivision.entity';
-import { Employee } from '../models/entities/employee.entity';
+import { EmployeeService } from './employee.service';
 
 @Injectable()
 export class DivisionService {
@@ -17,23 +21,13 @@ export class DivisionService {
     @InjectRepository(Division) private divisionRepo: Repository<Division>,
     @InjectRepository(SubDivision)
     private subDivisionRepo: Repository<SubDivision>,
-    @InjectRepository(Employee) private employeeRepo: Repository<Employee>,
+    @Inject(forwardRef(() => EmployeeService))
+    private employeeService: EmployeeService,
   ) {}
 
   createDivision(createDivisionDto: CreateDivisionDto): Observable<Division> {
     return from(this.divisionRepo.save(createDivisionDto)).pipe(
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('duplicate key') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.BAD_REQUEST,
-              message: 'Already Exists',
-            },
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-        throw new Error();
-      }),
+      catchError(ErrorHandler.duplicationError()),
     );
   }
 
@@ -44,9 +38,9 @@ export class DivisionService {
     return this.findDivisionById(id).pipe(
       switchMap((division: Division) => {
         return from(this.divisionRepo.update(id, updateDivisionDto)).pipe(
-          switchMap((resp: UpdateResult) => {
+          map((resp: UpdateResult) => {
             if (resp.affected != 0) {
-              return of(division);
+              return division;
             }
             throw Error();
           }),
@@ -58,18 +52,7 @@ export class DivisionService {
   findDivisionById(id: number): Observable<Division> {
     return from(this.divisionRepo.findOneOrFail({ where: { id } })).pipe(
       take(1),
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('Could not find any entity') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              message: `Division not found with id ${id}`,
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
-        throw Error();
-      }),
+      catchError(ErrorHandler.entityNotFoundError(id, 'Division')),
     );
   }
 
@@ -79,13 +62,7 @@ export class DivisionService {
         return this.findSubDivisionbyDivisionId(division.id).pipe(
           switchMap((subDivision: SubDivision) => {
             if (subDivision) {
-              throw new HttpException(
-                {
-                  status: HttpStatus.NOT_ACCEPTABLE,
-                  message: `Division cannot be deleted`,
-                },
-                HttpStatus.NOT_ACCEPTABLE,
-              );
+              ErrorHandler.forbiddenAction('Division');
             }
 
             return this.divisionRepo.remove(division);
@@ -95,55 +72,33 @@ export class DivisionService {
     );
   }
 
-  deleteSubDivisionById(subDivisionId: number): Observable<SubDivision> {
-    return this.findSubdivisionById(subDivisionId).pipe(
-      switchMap((subDivision: SubDivision) => {
-        return this.findEmployeeBySubDivisionId(subDivisionId).pipe(
-          switchMap((employees: Employee[]) => {
-            if (employees.length == 0) {
-              return this.subDivisionRepo.remove(subDivision);
-            }
-            throw new HttpException(
-              {
-                status: HttpStatus.NOT_ACCEPTABLE,
-                message: `Subdivision cannot be deleted`,
-              },
-              HttpStatus.NOT_ACCEPTABLE,
-            );
-          }),
-        );
-      }),
-    );
-  }
-
-  findEmployeeBySubDivisionId(subDivisionId: number): Observable<Employee[]> {
-    return from(
-      this.employeeRepo.find({ where: { subDivision: { id: subDivisionId } } }),
-    );
-  }
-
   findSubDivisionbyDivisionId(divisionId: number): Observable<SubDivision> {
     return from(
       this.subDivisionRepo.findOne({ where: { division: { id: divisionId } } }),
     ).pipe(take(1));
   }
 
-  findSubdivisionById(id: number) {
-    console.log(id);
+  deleteSubDivisionById(subDivisionId: number): Observable<SubDivision> {
+    return this.findSubdivisionById(subDivisionId).pipe(
+      switchMap((subDivision: SubDivision) => {
+        return this.employeeService
+          .findEmployeeBySubDivisionId(subDivisionId)
+          .pipe(
+            switchMap((employees: Employee[]) => {
+              if (employees.length == 0) {
+                return this.subDivisionRepo.remove(subDivision);
+              }
+              ErrorHandler.forbiddenAction('Subdivision');
+            }),
+          );
+      }),
+    );
+  }
+
+  findSubdivisionById(id: number): Observable<SubDivision> {
     return from(this.subDivisionRepo.findOneOrFail({ where: { id } })).pipe(
       take(1),
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('Could not find any entity') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              message: `No Subdivsion found with id ${id}`,
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
-        throw Error();
-      }),
+      catchError(ErrorHandler.entityNotFoundError(id, 'Subdivision')),
     );
   }
 
@@ -154,19 +109,7 @@ export class DivisionService {
       switchMap((division: Division) => {
         return from(
           this.subDivisionRepo.save({ division, ...createSubDivision }),
-        ).pipe(
-          catchError((err: QueryFailedError) => {
-            if (err.message.indexOf('duplicate key') != -1)
-              throw new HttpException(
-                {
-                  status: HttpStatus.BAD_REQUEST,
-                  message: 'already exists',
-                },
-                HttpStatus.BAD_REQUEST,
-              );
-            throw Error();
-          }),
-        );
+        ).pipe(catchError(ErrorHandler.duplicationError()));
       }),
     );
   }
@@ -195,6 +138,17 @@ export class DivisionService {
             );
           }),
         );
+      }),
+    );
+  }
+
+  checkValidationForUpdatesubDivision(
+    divisionId: number,
+    subDivisionId: number,
+  ) {
+    return this.findDivisionById(divisionId).pipe(
+      switchMap((division: Division) => {
+        return this.findSubdivisionById(subDivisionId).pipe();
       }),
     );
   }

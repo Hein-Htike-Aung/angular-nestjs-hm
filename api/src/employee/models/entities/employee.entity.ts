@@ -1,4 +1,3 @@
-import { ROlE } from './user-role.enum';
 import { SubDivision } from './subDivision.entity';
 import { Position } from './position.entity';
 import {
@@ -7,8 +6,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from '../../../auth/models/entities/user.entity';
 
 export enum GENDER {
   MALE = 'MALE',
@@ -52,15 +53,7 @@ export class Employee {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ nullable: true, unique: true })
-  username: string;
-
-  @Column({ select: false, nullable: true })
-  password: string;
-
-  @Column({ type: 'enum', enum: ROlE, default: ROlE.USER })
-  role: ROlE;
-
-  @Column({ type: 'bool', name: 'active', default: true })
-  is_active: boolean;
+  @OneToOne(() => User, (user) => user.employee)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

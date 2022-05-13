@@ -1,11 +1,13 @@
-// import { AllExceptionFilter } from './shared/filters/all-exception.filter';
+import { JwtGuard } from './auth/guards/jwt.guard';
+import { AllExceptionFilter } from './shared/filters/all-exception.filter';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeModule } from './employee/employee.module';
 import { AuthModule } from './auth/auth.module';
 import config from '../ormconfig';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -24,7 +26,11 @@ import { APP_FILTER } from '@nestjs/core';
     }),
     EmployeeModule,
     AuthModule,
+    InvoiceModule,
   ],
-  // providers: [{ provide: APP_FILTER, useClass: AllExceptionFilter }],
+  providers: [
+    // { provide: APP_FILTER, useClass: AllExceptionFilter },
+    { provide: APP_GUARD, useClass: JwtGuard },
+  ],
 })
 export class AppModule {}

@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ErrorHandler } from './../../shared/utils/error.handler';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { catchError, from, Observable, switchMap, take } from 'rxjs';
 import { QueryFailedError, Repository, UpdateResult } from 'typeorm';
@@ -6,28 +13,19 @@ import { CreatePositionDto } from './../models/dto/create-position.dto';
 import { UpdatePositionDto } from './../models/dto/update-position.dto';
 import { Employee } from './../models/entities/employee.entity';
 import { Position } from './../models/entities/position.entity';
+import { EmployeeService } from './employee.service';
 
 @Injectable()
 export class PositionService {
   constructor(
     @InjectRepository(Position) private positionRepo: Repository<Position>,
-    @InjectRepository(Employee) private employeeRepo: Repository<Employee>,
+    @Inject(forwardRef(() => EmployeeService))
+    private employeeService: EmployeeService,
   ) {}
 
   createPosition(createPositionDto: CreatePositionDto): Observable<Position> {
     return from(this.positionRepo.save(createPositionDto)).pipe(
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('duplicate key') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.BAD_REQUEST,
-              message: 'Already exists',
-            },
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-        throw new Error();
-      }),
+      catchError(ErrorHandler.duplicationError()),
     );
   }
 
@@ -36,18 +34,7 @@ export class PositionService {
       this.positionRepo.findOneOrFail({ where: { id: positionId } }),
     ).pipe(
       take(1),
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('Could not find any entity') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              message: `Position not found with id ${positionId}`,
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
-        throw new Error();
-      }),
+      catchError(ErrorHandler.entityNotFoundError(positionId, 'Position')),
     );
   }
 
@@ -78,28 +65,15 @@ export class PositionService {
   deletePosition(id: number): Observable<Position> {
     return this.findPositionById(id).pipe(
       switchMap((position: Position) => {
-        return this.findEmployeesByPositionId(position.id).pipe(
+        return this.employeeService.findEmployeesByPositionId(position.id).pipe(
           switchMap((employees: Employee[]) => {
             if (employees.length == 0) {
               return this.positionRepo.remove(position);
             }
-
-            throw new HttpException(
-              {
-                status: HttpStatus.NOT_ACCEPTABLE,
-                message: `Position cannot be deleted`,
-              },
-              HttpStatus.NOT_ACCEPTABLE,
-            );
+            ErrorHandler.forbiddenAction('Position');
           }),
         );
       }),
-    );
-  }
-
-  findEmployeesByPositionId(positionId: number): Observable<Employee[]> {
-    return from(
-      this.employeeRepo.find({ where: { position: { id: positionId } } }),
     );
   }
 }

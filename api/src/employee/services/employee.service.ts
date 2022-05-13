@@ -1,92 +1,113 @@
-import { SubDivision } from './../models/entities/subDivision.entity';
-import { Position } from './../models/entities/position.entity';
-import { Observable, switchMap, catchError, from, take } from 'rxjs';
-import { CreateEmployeeDto } from './../models/dto/create-employee.dto';
-import { Employee } from './../models/entities/employee.entity';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, QueryFailedError } from 'typeorm';
-
-export interface EmployeeServiceProvider {
-  createEmployee(createEmployeeDto: CreateEmployeeDto): Observable<Employee>;
-}
+import { catchError, from, Observable, switchMap, take } from 'rxjs';
+import { Repository, UpdateResult } from 'typeorm';
+import { ErrorHandler } from './../../shared/utils/error.handler';
+import { CreateEmployeeDto } from './../models/dto/create-employee.dto';
+import { UpdateEmployeeDto } from './../models/dto/update-employee.dto';
+import { Employee } from './../models/entities/employee.entity';
+import { Position } from './../models/entities/position.entity';
+import { SubDivision } from './../models/entities/subDivision.entity';
+import { DivisionService } from './division.service';
+import { PositionService } from './position.service';
 
 @Injectable()
-export class EmployeeService implements EmployeeServiceProvider {
+export class EmployeeService {
   constructor(
     @InjectRepository(Employee) private employeeRepo: Repository<Employee>,
-    @InjectRepository(Position) private positionRepo: Repository<Position>,
-    @InjectRepository(SubDivision)
-    private subDivisionRepo: Repository<SubDivision>,
+    @Inject(forwardRef(() => DivisionService))
+    private divisionService: DivisionService,
+    @Inject(forwardRef(() => PositionService))
+    private positionService: PositionService,
   ) {}
 
   createEmployee(createEmployeeDto: CreateEmployeeDto): Observable<Employee> {
-    return this.findPositionById(createEmployeeDto.positionId).pipe(
-      switchMap((position: Position) => {
-        return this.findSubdivisionById(createEmployeeDto.subDivisonid).pipe(
-          switchMap((subDivision: SubDivision) => {
-            return from(
-              this.employeeRepo.save({
-                position,
-                subDivision,
-                ...createEmployeeDto,
-              }),
-            ).pipe(
-              catchError((resp: QueryFailedError) => {
-                if (resp.message.indexOf('duplicate key') != -1) {
-                  throw new HttpException(
-                    {
-                      status: HttpStatus.BAD_REQUEST,
-                      message: `Already Exists`,
-                    },
-                    HttpStatus.BAD_REQUEST,
-                  );
-                }
-                throw new Error();
+    return this.positionService
+      .findPositionById(createEmployeeDto.positionId)
+      .pipe(
+        switchMap((position: Position) => {
+          return this.divisionService
+            .findSubdivisionById(createEmployeeDto.subDivisonid)
+            .pipe(
+              switchMap((subDivision: SubDivision) => {
+                return from(
+                  this.employeeRepo.save({
+                    position,
+                    subDivision,
+                    ...createEmployeeDto,
+                  }),
+                ).pipe(catchError(ErrorHandler.duplicationError()));
               }),
             );
-          }),
-        );
+        }),
+      );
+  }
+
+  updateEmployee(
+    id: number,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ): Observable<Employee> {
+    return this.findEmployeeById(id).pipe(
+      switchMap((_) => {
+        return this.positionService
+          .findPositionById(updateEmployeeDto.positionId)
+          .pipe(
+            switchMap((position: Position) => {
+              return this.divisionService
+                .findSubdivisionById(updateEmployeeDto.subDivisonid)
+                .pipe(
+                  switchMap((subDivision: SubDivision) => {
+                    delete updateEmployeeDto.positionId;
+                    delete updateEmployeeDto.subDivisonid;
+                    return from(
+                      this.employeeRepo.update(id, {
+                        position,
+                        subDivision,
+                        ...updateEmployeeDto,
+                      }),
+                    ).pipe(
+                      switchMap((resp: UpdateResult) => {
+                        if (resp.affected != 0)
+                          return this.findEmployeeById(id);
+
+                        throw new Error();
+                      }),
+                    );
+                  }),
+                );
+            }),
+          );
       }),
     );
   }
 
-  findPositionById(positionId: number): Observable<Position> {
+  findEmployeeById(id: number): Observable<Employee> {
     return from(
-      this.positionRepo.findOneOrFail({ where: { id: positionId } }),
+      this.employeeRepo.findOneOrFail({
+        where: { id },
+        relations: ['position', 'subDivision'],
+      }),
     ).pipe(
       take(1),
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('Could not find any entity') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              message: `Position not found with id ${positionId}`,
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
-        throw new Error();
-      }),
+      catchError(ErrorHandler.entityNotFoundError(id, 'Employoee')),
     );
   }
 
-  findSubdivisionById(id: number) {
-    console.log(id);
-    return from(this.subDivisionRepo.findOneOrFail({ where: { id } })).pipe(
-      take(1),
-      catchError((err: QueryFailedError) => {
-        if (err.message.indexOf('Could not find any entity') != -1) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              message: `No Subdivsion found with id ${id}`,
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
-        throw Error();
-      }),
+  findAllEmployee(): Observable<Employee[]> {
+    return from(
+      this.employeeRepo.find({ relations: ['position', 'subDivision'] }),
+    );
+  }
+
+  findEmployeesByPositionId(positionId: number): Observable<Employee[]> {
+    return from(
+      this.employeeRepo.find({ where: { position: { id: positionId } } }),
+    );
+  }
+
+  findEmployeeBySubDivisionId(subDivisionId: number): Observable<Employee[]> {
+    return from(
+      this.employeeRepo.find({ where: { subDivision: { id: subDivisionId } } }),
     );
   }
 }

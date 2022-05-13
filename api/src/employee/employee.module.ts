@@ -15,11 +15,8 @@ import { PositionService } from './services/position.service';
   imports: [
     TypeOrmModule.forFeature([Division, Position, SubDivision, Employee]),
   ],
-  providers: [
-    { provide: 'EmployeeServiceProvider', useClass: EmployeeService },
-    PositionService,
-    DivisionService,
-  ],
+  providers: [EmployeeService, PositionService, DivisionService],
   controllers: [EmployeeController, DivisionController, PositionController],
+  exports: [EmployeeService]
 })
 export class EmployeeModule {}

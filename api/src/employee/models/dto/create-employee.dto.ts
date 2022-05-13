@@ -9,10 +9,10 @@ import {
   IsObject,
   IsString,
 } from 'class-validator';
-import { ROlE } from './../entities/user-role.enum';
-import { GENDER } from './../entities/employee.entity';
 import { Type } from 'class-transformer';
 import { IsNull } from 'typeorm';
+import { ROLE, User } from '../../../auth/models/entities/user.entity';
+import { GENDER } from '../entities/employee.entity';
 
 class ContactInfo {
   @IsEmail()
@@ -68,18 +68,19 @@ export class CreateEmployeeDto {
   @IsOptional()
   image?: string;
   
-  @IsEnum(ROlE)
-  role: ROlE;
+  @IsEnum(ROLE)
+  role: ROLE;
   
   @IsString()
-  @IsOptional()
-  username?: string;
+  username: string;
   
   @IsString()
-  @IsOptional()
-  password?: string;
+  password: string;
   
   @IsBoolean()
   @IsOptional()
   is_Active: boolean;
+
+  @IsOptional()
+  user?: User;
 }

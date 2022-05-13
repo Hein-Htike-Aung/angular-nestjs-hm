@@ -1,25 +1,27 @@
-import { UpdateSubDivisionDto } from './../models/dto/update-subdivision.dto';
-import { SubDivision } from './../models/entities/subDivision.entity';
-import { CreateSubDivisionDto } from './../models/dto/create-subdivision.dto';
-import { UpdateDivisionDto } from './../models/dto/update-division.dto';
-import { Division } from './../models/entities/division.entity';
-import { Observable } from 'rxjs';
-import { CreateDivisionDto } from './../models/dto/create-division.dto';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
-  Post,
+  Post
 } from '@nestjs/common';
-import { DivisionService } from '../services/division.service';
-import { create } from 'domain';
+import { Observable } from 'rxjs';
+import { CreateDivisionDto } from './../models/dto/create-division.dto';
+import { CreateSubDivisionDto } from './../models/dto/create-subdivision.dto';
+import { UpdateDivisionDto } from './../models/dto/update-division.dto';
+import { UpdateSubDivisionDto } from './../models/dto/update-subdivision.dto';
+import { Division } from './../models/entities/division.entity';
+import { SubDivision } from './../models/entities/subDivision.entity';
+import { DivisionService } from './../services/division.service';
 
 @Controller('division')
 export class DivisionController {
-  constructor(private divisionService: DivisionService) {}
+  constructor(
+    private divisionService: DivisionService,
+  ) {}
 
   @Post()
   createDivision(
@@ -77,7 +79,7 @@ export class DivisionController {
   }
 
   @Delete('subdivision/:id')
-  deleteSubDivisionById(@Param("id") id: number): Observable<SubDivision> {
+  deleteSubDivisionById(@Param('id') id: number): Observable<SubDivision> {
     return this.divisionService.deleteSubDivisionById(id);
   }
 }

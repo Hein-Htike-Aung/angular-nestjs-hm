@@ -1,17 +1,18 @@
-import { UpdatePositionDto } from './../models/dto/update-position.dto';
-import { Position } from './../models/entities/position.entity';
-import { Observable } from 'rxjs';
-import { CreatePositionDto } from './../models/dto/create-position.dto';
-import { PositionService } from './../services/position.service';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { CreatePositionDto } from './../models/dto/create-position.dto';
+import { UpdatePositionDto } from './../models/dto/update-position.dto';
+import { Position } from './../models/entities/position.entity';
+import { PositionService } from './../services/position.service';
 
 @Controller('position')
 export class PositionController {

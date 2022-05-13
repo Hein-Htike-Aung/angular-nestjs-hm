@@ -20,8 +20,8 @@ Content-Type: application/json
 GET http://localhost:3000/division/3
 
 
-### delete Division (Task with subdivision)
-DELETE http://localhost:3000/division/6
+### delete Division
+DELETE http://localhost:3000/division/1
 
 
 ### Create SubDivision 
@@ -52,6 +52,6 @@ GET http://localhost:3000/division
 GET http://localhost:3000/division/subdivisions/list
 
 
-### Delete subDivision by id (Task with employee id)
-DELETE http://localhost:3000/division/subdivision/12
+### Delete subDivision by id
+DELETE http://localhost:3000/division/subdivision/11
 
