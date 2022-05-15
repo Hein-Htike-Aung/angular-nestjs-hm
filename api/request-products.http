@@ -1,0 +1,57 @@
+### Create Cateogry
+POST http://localhost:3000/category
+Content-Type: application/json
+
+{
+    "name": "Houekeeping products"
+}
+
+### Update Category
+PATCH http://localhost:3000/category/1
+Content-Type: application/json
+
+{
+    "name": "Updated Items"
+}
+
+
+### Delete Category
+DELETE http://localhost:3000/category/1
+
+### find Category by id
+GET http://localhost:3000/category/2
+
+
+### find all Categories
+GET http://localhost:3000/category
+
+
+### Create Product
+POST http://localhost:3000/product
+Content-Type: application/json
+
+{
+    "name": "Quilt Cover",
+    "categoryId": 4
+}
+
+
+### Update product
+PATCH http://localhost:3000/product/5
+Content-Type: application/json
+
+{
+    "name": "Updateed product",
+    "categoryId": 2
+}
+
+### Delete product
+DELETE http://localhost:3000/product/6
+
+
+### find Product by id
+GET http://localhost:3000/product/6
+
+
+### find all products
+GET http://localhost:3000/product

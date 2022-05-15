@@ -1,0 +1,43 @@
+### Create Invoice
+POST http://localhost:3000/invoice
+Content-Type: application/json
+
+{
+    "purchaseDate": "2022-12-12",
+    "supplierId": 2,
+    "employeeId": 1,
+    "paymentStatus": "Paid",
+    "createPurchaseItemDto": [
+        {
+            "productId": 7,
+            "rate": 100,
+            "quantity": 3
+        }
+    ]
+}
+
+### Update Invoice
+PATCH http://localhost:3000/invoice/98
+Content-Type: application/json
+
+{
+    "purchaseDate": "2022-12-12",
+    "supplierId": 2,
+    "employeeId": 1,
+    "paymentStatus": "Paid",
+    "createPurchaseItemDto": [
+        {
+            "productId": 5,
+            "rate": 100,
+            "quantity": 1
+        }
+    ]
+}
+
+
+### Find Invoice By id
+GET http://localhost:3000/invoice/36
+
+
+### Find All Invoices
+GET http://localhost:3000/invoice

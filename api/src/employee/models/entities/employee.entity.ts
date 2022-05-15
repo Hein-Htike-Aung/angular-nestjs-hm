@@ -1,3 +1,4 @@
+import { Invoice } from './../../../invoice/models/entities/invoice.entity';
 import { SubDivision } from './subDivision.entity';
 import { Position } from './position.entity';
 import {
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -56,4 +58,7 @@ export class Employee {
   @OneToOne(() => User, (user) => user.employee)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Invoice, (invoice) => invoice.employee)
+  invoices: Invoice[];
 }

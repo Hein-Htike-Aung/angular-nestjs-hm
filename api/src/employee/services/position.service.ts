@@ -70,7 +70,7 @@ export class PositionService {
             if (employees.length == 0) {
               return this.positionRepo.remove(position);
             }
-            ErrorHandler.forbiddenAction('Position');
+            ErrorHandler.forbiddenDeleteAction('Position');
           }),
         );
       }),

@@ -1,0 +1,29 @@
+### Create Supplier 
+POST http://localhost:3000/supplier
+Content-Type: application/json
+
+{
+    "name": "Supplier_1",
+    "phone": "01234567890",
+    "email": "supplier@email.com",
+    "address": "simpan village"
+}
+
+### Update supplier
+PATCH http://localhost:3000/supplier/3
+Content-Type: application/json
+
+{
+    "name": "Updated Supplier_1"
+}
+
+### Delete Supplier
+DELETE http://localhost:3000/supplier/3
+
+### find Supplier by id
+GET http://localhost:3000/supplier/1
+
+
+### find All Suppliers
+GET http://localhost:3000/supplier?invoices=true
+

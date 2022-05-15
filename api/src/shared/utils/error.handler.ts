@@ -31,7 +31,7 @@ export class ErrorHandler {
     };
   }
 
-  static forbiddenAction(entityName: string) {
+  static forbiddenDeleteAction(entityName: string) {
     throw new HttpException(
       {
         status: HttpStatus.NOT_ACCEPTABLE,
@@ -50,4 +50,5 @@ export class ErrorHandler {
       HttpStatus.UNAUTHORIZED,
     );
   }
+
 }

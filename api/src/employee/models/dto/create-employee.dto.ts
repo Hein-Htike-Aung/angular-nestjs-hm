@@ -35,10 +35,7 @@ export class CreateEmployeeDto {
 
   @ValidateNested()
   @Type(() => ContactInfo)
-  contact: {
-    phone: string;
-    email: string;
-  };
+  contact: ContactInfo;
   
   @IsDate()
   @IsNotEmpty()

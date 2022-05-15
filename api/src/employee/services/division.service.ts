@@ -1,7 +1,4 @@
-import {
-  forwardRef, Inject,
-  Injectable
-} from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { catchError, from, map, Observable, switchMap, take } from 'rxjs';
 import { Repository, UpdateResult } from 'typeorm';
@@ -36,11 +33,11 @@ export class DivisionService {
     updateDivisionDto: UpdateDivisionDto,
   ): Observable<Division> {
     return this.findDivisionById(id).pipe(
-      switchMap((division: Division) => {
+      switchMap((_) => {
         return from(this.divisionRepo.update(id, updateDivisionDto)).pipe(
-          map((resp: UpdateResult) => {
+          switchMap((resp: UpdateResult) => {
             if (resp.affected != 0) {
-              return division;
+              return this.findDivisionById(id);
             }
             throw Error();
           }),
@@ -62,7 +59,7 @@ export class DivisionService {
         return this.findSubDivisionbyDivisionId(division.id).pipe(
           switchMap((subDivision: SubDivision) => {
             if (subDivision) {
-              ErrorHandler.forbiddenAction('Division');
+              ErrorHandler.forbiddenDeleteAction('Division');
             }
 
             return this.divisionRepo.remove(division);
@@ -88,7 +85,7 @@ export class DivisionService {
               if (employees.length == 0) {
                 return this.subDivisionRepo.remove(subDivision);
               }
-              ErrorHandler.forbiddenAction('Subdivision');
+              ErrorHandler.forbiddenDeleteAction('Subdivision');
             }),
           );
       }),
