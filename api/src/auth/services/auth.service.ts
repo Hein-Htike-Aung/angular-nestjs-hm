@@ -75,7 +75,6 @@ export class AuthService {
 
         return from(bcrypt.compare(password, user.password)).pipe(
           map((isPasswordValid: boolean) => {
-            console.log(isPasswordValid);
             if (isPasswordValid) {
               delete user.password;
               return user;

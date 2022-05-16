@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { catchError, from, Observable, switchMap, take } from 'rxjs';
+import { catchError, Observable, switchMap, take, map, of } from 'rxjs';
+import { from } from 'rxjs';
 import { Repository, UpdateResult } from 'typeorm';
 import { ErrorHandler } from './../../shared/utils/error.handler';
 import { CreateEmployeeDto } from './../models/dto/create-employee.dto';
@@ -77,6 +78,40 @@ export class EmployeeService {
                 );
             }),
           );
+      }),
+    );
+  }
+
+  uploadEmployeeImage(
+    employeeId: number,
+    fileName: string,
+  ): Observable<{ modifiedFileName: string }> {
+    return this.findEmployeeById(employeeId).pipe(
+      switchMap((_) => {
+        return from(
+          this.employeeRepo.update(employeeId, { image: fileName }),
+        ).pipe(
+          map((resp: UpdateResult) => {
+            if (resp.affected != -1) return { modifiedFileName: fileName };
+          }),
+        );
+      }),
+    );
+  }
+
+  findEmployeeImageNameById(
+    employeeId: number,
+  ): Observable<{ imageName: string }> {
+    return this.findEmployeeById(employeeId).pipe(
+      switchMap((_) => {
+        return from(
+          this.employeeRepo.findOne({ where: { id: employeeId } }),
+        ).pipe(
+          take(1),
+          map((employee: Employee) => {
+            return { imageName: employee.image };
+          }),
+        );
       }),
     );
   }

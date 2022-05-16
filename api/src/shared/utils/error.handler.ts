@@ -51,4 +51,23 @@ export class ErrorHandler {
     );
   }
 
+  static throwInvalidImage() {
+    throw new HttpException(
+      {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'File Type is not valid',
+      },
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  static throwUnexistingEmployeeImage(id: number) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        message: `No image found for this employee (id - ${id})`,
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
 }

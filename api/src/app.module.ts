@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import config from '../ormconfig';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { InvoiceModule } from './invoice/invoice.module';
+import { RoomModule } from './room/room.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { InvoiceModule } from './invoice/invoice.module';
     EmployeeModule,
     AuthModule,
     InvoiceModule,
+    RoomModule,
+    BookingModule,
   ],
   providers: [
     // { provide: APP_FILTER, useClass: AllExceptionFilter },

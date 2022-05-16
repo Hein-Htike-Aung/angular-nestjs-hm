@@ -23,3 +23,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxL
 
 ### Get All employees
 GET http://localhost:3000/employee
+
+
+### Upload Image (Test with postman)
+POST http://localhost:3000/employee/upload-image/3
+
+
+### find Employee's ImageName
+GET http://localhost:3000/employee/image-name/3
+
+### find Employee's Actual Image
+GET http://localhost:3000/employee/actual-image/2

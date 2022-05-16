@@ -25,6 +25,7 @@ import { Product } from './../models/entities/Product.entity';
 import { PurchaseItem } from './../models/entities/purchase-item.entity';
 import { ProductService } from './product.service';
 import { SupplierService } from './supplier.service';
+var _ = require('underscore');
 
 @Injectable()
 export class InvoiceService {
@@ -45,7 +46,7 @@ export class InvoiceService {
     id?: number,
   ): Observable<Invoice> {
     const { createPurchaseItemDto, ...invoice } = createInvoiceDto;
-
+    
     // map CreatePurchaseItemDto[] -> PurchaseItem[]
     return of(createPurchaseItemDto).pipe(
       mergeMap((resp: CreatePurchaseItemDto[]) => {
@@ -129,39 +130,57 @@ export class InvoiceService {
     const oldItems = storedInvoice.purchaseItems;
     const newItems = purchaseItems;
 
-    oldItems.forEach((storedItem: PurchaseItem) => {
-      let foundOld = false;
-      newItems.forEach((newItem) => {
-        if (storedItem.product.id === newItem.product.id) {
-          console.log('adding or reducing');
-          // add or reduce
-          this.addProductQuantity(storedItem, newItem.quantity);
-          foundOld = true;
-        }
-      });
-      // remove
-      if (!foundOld) {
-        console.log('removing');
-        this.deductProductQuantity(storedItem, storedItem.quantity);
+    const oldItemsProductsIds = oldItems.map((ot) => ot.product.id);
+    const newItemsProductsIds = newItems.map((nt) => nt.product.id);
+
+    const targetAddingIds: number[] = _.difference(
+      newItemsProductsIds,
+      oldItemsProductsIds,
+    );
+
+    newItems.forEach((nt) => {
+      if (targetAddingIds.includes(nt.product.id)) {
+        // add New
+        this.addProductQuantity(nt, nt.quantity, true);
       }
     });
 
-    newItems
-      .filter((nt) => {
-        oldItems.forEach((ot) => ot.product.id != nt.product.id);
-      })
-      .forEach((fnt) => {
-        console.log('adding new');
-        this.addProductQuantity(fnt, fnt.quantity);
+    const targetRemovingIds: number[] = _.difference(
+      oldItemsProductsIds,
+      newItemsProductsIds,
+    );
+
+    oldItems.forEach((ot) => {
+      if (targetRemovingIds.includes(ot.product.id)) {
+        // removing
+        this.deductProductQuantity(ot, ot.quantity);
+      }
+    });
+
+    oldItems.forEach((storedItem: PurchaseItem) => {
+      newItems.forEach((newItem) => {
+        if (
+          storedItem.product.id === newItem.product.id &&
+          storedItem.quantity !== newItem.quantity
+        ) {
+          // add or reduce
+          this.addProductQuantity(storedItem, newItem.quantity);
+        }
       });
+    });
   }
 
-  addProductQuantity(storedItem: PurchaseItem, updatedQuantity: number) {
+  addProductQuantity(
+    storedItem: PurchaseItem,
+    updatedQuantity: number,
+    addNew = false,
+  ) {
     this.productService
       .findProductById(storedItem.product.id)
       .pipe(
         tap((product: Product) => {
-          let originalQuantity = product.quantity - storedItem.quantity;
+          let originalQuantity =
+            product.quantity - (addNew ? 0 : storedItem.quantity);
           this.productService
             .updateProduct(storedItem.product.id, {
               quantity: originalQuantity + updatedQuantity,

@@ -33,6 +33,7 @@
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "lodash": "^4.17.21",
     "nestjs-typeorm-paginate": "^4.0.1",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
@@ -42,6 +43,7 @@
     "rxjs": "^7.2.0",
     "sqlite3": "^5.0.8",
     "typeorm": "^0.3.6",
+    "underscore": "^1.13.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -60,7 +62,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "file-type": "^17.1.1",
+    "file-type": "16.5.3",
     "jest": "^27.2.5",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",

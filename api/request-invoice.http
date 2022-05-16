@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Update Invoice
-PATCH http://localhost:3000/invoice/98
+PATCH http://localhost:3000/invoice/181
 Content-Type: application/json
 
 {
@@ -27,9 +27,14 @@ Content-Type: application/json
     "paymentStatus": "Paid",
     "createPurchaseItemDto": [
         {
+            "productId": 7,
+            "rate": 100,
+            "quantity": 10
+        },
+        {
             "productId": 5,
             "rate": 100,
-            "quantity": 1
+            "quantity": 10
         }
     ]
 }
