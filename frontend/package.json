@@ -20,6 +20,8 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@capacitor/cli": "^3.5.1",
+    "@capacitor/core": "^3.5.1",
     "@capacitor/storage": "^1.2.5",
     "angular-google-charts": "^2.2.2",
     "bootstrap": "^5.1.3",

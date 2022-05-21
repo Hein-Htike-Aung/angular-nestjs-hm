@@ -1,3 +1,6 @@
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AppMaterialModule } from './app-material.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -6,15 +9,18 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AppMaterialModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
