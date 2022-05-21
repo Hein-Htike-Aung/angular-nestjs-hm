@@ -1,4 +1,123 @@
-<div>side bar</div>
-<a routerLink="employee/division">Division</a>
-<a routerLink="home">Dashboard</a>
-<router-outlet></router-outlet>
+<!-- Side bar -->
+<mat-sidenav-container>
+  <!-- mode = over,side,push -->
+  <mat-sidenav #sidenav mode="side" [(opened)]="openSideBar" class="sidebar">
+    <div class="text-center display-6 mb-4 mt-3 text-white">Xain Hotel</div>
+    <ul>
+      <li class="menu">
+        <a [routerLink]="['home']" routerLinkActive="active"
+          ><h2 class="page-header">
+            <mat-icon>dashboard</mat-icon> Dashboard
+          </h2></a
+        >
+      </li>
+      <li class="menu">
+        <a (click)="toggleEmployeesMenu()" [routerLink]="['employee']" routerLinkActive="active">
+          <h2>
+            <mat-icon>supervisor_account</mat-icon>
+            <span class="menu-text">Employees</span>
+            <mat-icon class="spinner employee-spinner">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul class="sub-menu employee-sub-menu">
+          <li><a [routerLink]="['employee/division']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Division</a></li>
+          <li><a [routerLink]="['employee/position']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Position</a></li>
+          <li><a class="mat-body-2"><mat-icon> short_text</mat-icon> Employee</a></li>
+        </ul>
+      </li>
+      <li class="menu">
+        <a (click)="toggleProductsMenu()" [routerLink]="['invoice']" routerLinkActive="active">
+          <h2>
+            <mat-icon>view_comfy</mat-icon>
+            <span class="menu-text">Products</span>
+            <mat-icon class="spinner product-spinner">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul class="sub-menu product-sub-menu">
+          <li><a [routerLink]="['invoice/product']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Product</a></li>
+        </ul>
+      </li>
+      <li class="menu"> 
+        <a>
+          <h2>
+            <mat-icon>add_shopping_cart</mat-icon>
+            <span class="menu-text">Purchase</span>
+            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+      <li class="menu">
+        <a>
+          <h2>
+            <mat-icon>meeting_room</mat-icon>
+            <span class="menu-text">Rooms</span>
+            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+      <li class="menu">
+        <a>
+          <h2>
+            <mat-icon>compare_arrows</mat-icon>
+            <span class="menu-text">Reservation</span>
+            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+      <li class="menu">
+        <a>
+          <h2>
+            <mat-icon>assignment</mat-icon>
+            <span class="menu-text">Reports</span>
+            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+      <li class="menu">
+        <a>
+          <h2>
+            <mat-icon>settings</mat-icon>
+            <span class="menu-text">Setting</span>
+            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+          </h2>
+        </a>
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+    </ul>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="d-flex justify-content-end mb-5">
+      <div class="me-3">
+        <button color="accent" mat-raised-button>Website</button>
+      </div>
+      <div class="me-3">
+        <button mat-raised-button><mat-icon>apps</mat-icon></button>
+      </div>
+      <div class="me-3">
+        <button mat-raised-button><mat-icon> person_pin</mat-icon></button>
+      </div>
+      <div>
+        <button color="primary" mat-raised-button>
+          <span style="font-size: 25px">{{ time | date: "hh:mm:ss a" }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

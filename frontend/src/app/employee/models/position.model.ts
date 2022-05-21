@@ -4,7 +4,12 @@ export interface Position {
   id: number;
 
   name: string;
+
   details: string;
 
   employees: Employee[];
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }

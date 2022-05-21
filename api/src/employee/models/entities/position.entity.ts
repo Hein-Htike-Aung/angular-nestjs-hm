@@ -1,5 +1,5 @@
 import { Employee } from './employee.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Position {
@@ -14,4 +14,10 @@ export class Position {
 
   @OneToMany(() => Employee, (employee) => employee.position)
   employees: Employee[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
