@@ -1,0 +1,113 @@
+<!-- Title -->
+<div class="page-header mb-5">
+  <mat-icon class="me-1">label_important</mat-icon>
+  <span>Manage Employee</span>
+</div>
+
+<div>
+  <!-- Search -->
+  <mat-form-field style="width: 200px" color="primary">
+    <input
+      #filterInput
+      matInput
+      (input)="filter(filterInput.value)"
+      placeholder="Search Employee ..."
+      type="text"
+    />
+  </mat-form-field>
+
+  <button style="float: right" mat-raised-button>
+    <mat-icon>add</mat-icon> Add Position
+  </button>
+</div>
+
+<!-- Table -->
+<div class="mat-elevation-z8 table-responsive" [hidden]="employees.length === 0">
+  <table mat-table matSort [dataSource]="employeesDataSource">
+    <ng-container matColumnDef="id">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>SL</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="contact">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Contact</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.contact.phone + ' | ' + element.contact.email }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="position">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Position</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.position.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="subDivision">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Sub Division</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.subDivision.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gender">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.gender }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="familyMember">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Family Members</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.familyMember }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dob">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Dob</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.dob }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hireDate">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Hire Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.hireDate | date }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No matching data</td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    color="primary"
+    showFirstLastButtons
+    [pageSizeOptions]="[10, 20, 30, 40]"
+  ></mat-paginator>
+</div>

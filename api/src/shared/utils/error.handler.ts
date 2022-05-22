@@ -8,7 +8,7 @@ export class ErrorHandler {
         throw new HttpException(
           {
             status: HttpStatus.BAD_REQUEST,
-            message: 'already exists',
+            message: 'Already exists',
           },
           HttpStatus.BAD_REQUEST,
         );
@@ -48,6 +48,16 @@ export class ErrorHandler {
         message: message || `Invalid Credential`,
       },
       HttpStatus.UNAUTHORIZED,
+    );
+  }
+
+  static throwAlreadyExistsException() {
+    throw new HttpException(
+      {
+        status: HttpStatus.BAD_REQUEST,
+        message: `Already exists`,
+      },
+      HttpStatus.BAD_REQUEST,
     );
   }
 

@@ -28,7 +28,7 @@ export class EmployeeService {
       .pipe(
         switchMap((position: Position) => {
           return this.divisionService
-            .findSubdivisionById(createEmployeeDto.subDivisonid)
+            .findSubdivisionById(createEmployeeDto.subDivisonId)
             .pipe(
               switchMap((subDivision: SubDivision) => {
                 return from(
@@ -55,11 +55,11 @@ export class EmployeeService {
           .pipe(
             switchMap((position: Position) => {
               return this.divisionService
-                .findSubdivisionById(updateEmployeeDto.subDivisonid)
+                .findSubdivisionById(updateEmployeeDto.subDivisonId)
                 .pipe(
                   switchMap((subDivision: SubDivision) => {
                     delete updateEmployeeDto.positionId;
-                    delete updateEmployeeDto.subDivisonid;
+                    delete updateEmployeeDto.subDivisonId;
                     return from(
                       this.employeeRepo.update(id, {
                         position,
@@ -120,7 +120,7 @@ export class EmployeeService {
     return from(
       this.employeeRepo.findOneOrFail({
         where: { id },
-        relations: ['position', 'subDivision'],
+        relations: ['position', 'subDivision', 'user'],
       }),
     ).pipe(
       take(1),

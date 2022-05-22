@@ -2,7 +2,7 @@ import { RolesGuard } from './../guards/roles.guard';
 import { CreateEmployeeDto } from './../../employee/models/dto/create-employee.dto';
 import { ROLE, User } from './../models/entities/user.entity';
 import { Employee } from './../../employee/models/entities/employee.entity';
-import { Observable } from 'rxjs';
+import { Observable, tap, map } from 'rxjs';
 import { AuthService } from './../services/auth.service';
 import {
   Body,
@@ -23,9 +23,9 @@ export class AuthController {
 
   @PublicRoute()
   @Post('register/employee')
-  registerEmployee(
+  createEmployee(
     @Body() createEmployeeDto: CreateEmployeeDto,
-  ): Observable<User> {
+  ): Observable<Employee> {
     return this.authService.registerEmployee(createEmployeeDto);
   }
 

@@ -1,17 +1,20 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="positionForm">
+    <form [formGroup]="subDivisionForm">
         <mat-form-field appearance="standard" color="primary">
-            <mat-label>Position</mat-label>
+            <mat-label>Sub Division</mat-label>
             <input type="text" formControlName="name" matInput [errorStateMatcher]="errorMatcher">
             <mat-error>
-                Position is required
+                SubDivision is required
             </mat-error>
         </mat-form-field>
-        
+
         <mat-form-field color="primary">
-            <mat-label>Details</mat-label>
-            <textarea formControlName="details" matInput></textarea>
+            <mat-label>Select Division</mat-label>
+            <mat-select formControlName="divisionId">
+                <mat-option>Select Division</mat-option>
+                <mat-option *ngFor="let d of divisions" [value]="d.id">{{ d.name }}</mat-option>
+            </mat-select>
         </mat-form-field>
     </form>
 </mat-dialog-content>   
@@ -19,5 +22,5 @@
   <button mat-button mat-dialog-close mat-dialog-close="true">
     Close
   </button>
-  <button [disabled]="positionForm.invalid" (click)="save()" mat-button >Save</button>
+  <button [disabled]="subDivisionForm.invalid" (click)="save()" mat-button >Save</button>
 </mat-dialog-actions>

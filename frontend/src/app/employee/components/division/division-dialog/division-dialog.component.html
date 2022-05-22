@@ -1,17 +1,12 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="positionForm">
+    <form [formGroup]="divisionForm">
         <mat-form-field appearance="standard" color="primary">
             <mat-label>Position</mat-label>
             <input type="text" formControlName="name" matInput [errorStateMatcher]="errorMatcher">
             <mat-error>
-                Position is required
+                Division is required
             </mat-error>
-        </mat-form-field>
-        
-        <mat-form-field color="primary">
-            <mat-label>Details</mat-label>
-            <textarea formControlName="details" matInput></textarea>
         </mat-form-field>
     </form>
 </mat-dialog-content>   
@@ -19,5 +14,5 @@
   <button mat-button mat-dialog-close mat-dialog-close="true">
     Close
   </button>
-  <button [disabled]="positionForm.invalid" (click)="save()" mat-button >Save</button>
+  <button [disabled]="divisionForm.invalid" (click)="save()" mat-button >Save</button>
 </mat-dialog-actions>

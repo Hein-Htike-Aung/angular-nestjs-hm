@@ -7,8 +7,18 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { catchError, from, map, Observable, switchMap } from 'rxjs';
+import {
+  catchError,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { Repository, UpdateResult } from 'typeorm';
+import { Employee } from '../../employee/models/entities/employee.entity';
 import { CredentailInfo } from '../models/dto/credential-info.dto';
 import { CreateEmployeeDto } from './../../employee/models/dto/create-employee.dto';
 import { EmployeeService } from './../../employee/services/employee.service';
@@ -23,24 +33,41 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  registerEmployee(createEmployeeDto: CreateEmployeeDto): Observable<any> {
-    return this.hashPassword(createEmployeeDto.password).pipe(
-      switchMap((hashPassword: string) => {
-        return from(
-          this.userRepo.save({ ...createEmployeeDto, password: hashPassword }),
-        ).pipe(
-          switchMap((user: User) => {
-            return from(
-              this.employeeService.createEmployee({
-                user,
-                ...createEmployeeDto,
-              }),
-            );
-          }),
-          catchError(ErrorHandler.duplicationError()),
-        );
+  registerEmployee(createEmployeeDto: CreateEmployeeDto): Observable<Employee> {
+    return this.findUserWithUsername(createEmployeeDto.username).pipe(
+      switchMap((user: User) => {
+        if (user) {
+          throw ErrorHandler.throwAlreadyExistsException();
+        }
+
+        if (createEmployeeDto.username && createEmployeeDto.password) {
+          return this.employeeService.createEmployee(createEmployeeDto).pipe(
+            switchMap((employee: Employee) => {
+              return this.hashPassword(createEmployeeDto.password).pipe(
+                switchMap((hashPassword: string) => {
+                  return from(
+                    this.userRepo.save({
+                      username: createEmployeeDto.username,
+                      password: hashPassword,
+                    }),
+                  ).pipe(
+                    switchMap((user: User) => {
+                      return this.employeeService.updateEmployee(employee.id, {
+                        user,
+                      });
+                    }),
+                  );
+                }),
+              );
+            }),
+          );
+        }
       }),
     );
+  }
+
+  findUserWithUsername(username: string) {
+    return from(this.userRepo.findOne({ where: { username } })).pipe(take(1));
   }
 
   hashPassword(password: string): Observable<String> {
@@ -63,7 +90,12 @@ export class AuthService {
   }
 
   validateUser(username: string, password: string): Observable<User> {
-    return from(this.userRepo.findOne({ where: { username } })).pipe(
+    return from(
+      this.userRepo.findOne({
+        where: { username },
+        select: ['username', 'password', 'is_active'],
+      }),
+    ).pipe(
       switchMap((user: User) => {
         if (!user) {
           ErrorHandler.throwUnAuthorizeException();

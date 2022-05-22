@@ -1,0 +1,72 @@
+<!-- Title -->
+<div class="page-header mb-5">
+    <mat-icon class="me-1">label_important</mat-icon>
+    <span>Sub Division List Details</span>
+  </div>
+  
+  <div>
+    <!-- Search -->
+    <mat-form-field style="width: 200px" color="primary">
+      <input
+        #filterInput
+        matInput
+        (input)="filter(filterInput.value)"
+        placeholder="Search Sub Division..."
+        type="text"
+      />
+    </mat-form-field>
+  
+    <button style="float: right" mat-raised-button (click)="addNew()">
+      <mat-icon>add</mat-icon> Add Position
+    </button>
+  </div>
+  
+  <!-- Table -->
+  <div class="mat-elevation-z8" [hidden]="subDivisions?.length === 0">
+    <table mat-table matSort [dataSource]="subDivisionDataSource">
+      <ng-container matColumnDef="id">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>SL</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="name">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Sub Division</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="division">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Parent Division</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.division.name }}
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button (click)="edit(element)" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="delete(element)" mat-icon-button color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+  
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No matching data</td>
+      </tr>
+    </table>
+  
+    <mat-paginator
+      color="primary"
+      showFirstLastButtons
+      [pageSizeOptions]="[10, 20, 30, 40]"
+    ></mat-paginator>
+  </div>
+  

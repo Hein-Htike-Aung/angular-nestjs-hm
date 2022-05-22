@@ -20,14 +20,13 @@ export class PositionComponent implements OnInit {
   positions: Position[] = [];
 
   positionDataSource: MatTableDataSource<Position>;
-  displayColumns: string[] = ['SL', 'Name', 'Details', 'Action'];
+  displayColumns: string[] = ['id', 'name', 'details', 'action'];
 
   @ViewChild(MatSort) matSort!: MatSort;
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
 
   constructor(
     private toastr: ToastrService,
-    private builder: FormBuilder,
     private positionService: PositionService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -69,6 +68,9 @@ export class PositionComponent implements OnInit {
         data: {
           title: 'Add New Position',
         },
+        position: {
+          top: '20px',
+        }
       })
       .afterClosed()
       .subscribe((resp) => {
@@ -85,6 +87,9 @@ export class PositionComponent implements OnInit {
           title: 'Edit Position',
           position,
         },
+        position: {
+          top: '20px',
+        }
       })
       .afterClosed()
       .subscribe((resp) => {

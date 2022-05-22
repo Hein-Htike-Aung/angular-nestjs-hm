@@ -10,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../../auth/models/entities/user.entity';
 
@@ -61,4 +62,10 @@ export class Employee {
 
   @OneToMany(() => Invoice, (invoice) => invoice.employee)
   invoices: Invoice[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

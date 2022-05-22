@@ -59,24 +59,27 @@ export class CreateEmployeeDto {
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
-  subDivisonid: number;
+  subDivisonId: number;
   
   @IsString()
   @IsOptional()
   image?: string;
   
   @IsEnum(ROLE)
+  @IsOptional()
   role: ROLE;
   
   @IsString()
-  username: string;
+  @IsOptional()
+  username?: string;
   
   @IsString()
-  password: string;
+  @IsOptional()
+  password?: string;
   
   @IsBoolean()
   @IsOptional()
-  is_Active: boolean;
+  is_Active?: boolean;
 
   @IsOptional()
   user?: User;

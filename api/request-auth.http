@@ -14,28 +14,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo4L
 
 ### find all users
 GET http://localhost:3000/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo4LCJ1c2VybmFtZSI6ImFkbWludXNlcjEiLCJyb2xlIjoiQURNSU4iLCJpc19hY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjItMDUtMTNUMTQ6MDQ6MTYuNzE4WiIsInVwZGF0ZWRBdCI6IjIwMjItMDUtMTNUMTQ6MDQ6MTYuNzE4WiJ9LCJpYXQiOjE2NTI0NTA2NjUsImV4cCI6MTY1MjQ1NDI2NX0.Vz0ZHjjV5Jyxwq1cA3nIp0oDCQlMEBBAF7ebzWTQfiA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo4LCJ1c2VybmFtZSI6ImFkbWludXNlcjEiLCJyb2xlIjoiQURNSU4iLCJpc19hY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjItMDUtMTNUMTQ6MDQ6MTYuNzE4WiIsInVwZGF0ZWRBdCI6IjIwMjItMDUtMTNUMTQ6MDQ6MTYuNzE4WiJ9LCJpYXQiOjE2NTMyMTczMjgsImV4cCI6MTY1MzIyMDkyOH0.OTZuzRSOgzg-u1DLfz2aBIg70k7jIYWJw3TKBl4XZ34
 
 ### Create Employee
 POST http://localhost:3000/auth/register/employee
 Content-Type: application/json
 
 {
-    "name": "admin",
-    "familyMember": ["Bot1", "Bot2"],
+    "name": "employee-26",
+    "familyMember": ["e1", "e2"],
     "contact": {
-        "phone": "0923332323",
-        "email": "admin@gmial.com"
+        "phone": "09239634359",
+        "email": "employee26@gmial.com"
     },
     "dob": "2000-12-12",
     "gender": "MALE",
+    "username": "employee26",
+    "password": "employee26",
+    "role": "EMPLOYEE",
     "positionId": 9,
-    "subDivisonid": 11,
-    "username": "adminuser1",
-    "password": "admin",
-    "role": "ADMIN"
+    "subDivisonId": 11
 }
 
 ### Block Employee By id
 PATCH http://localhost:3000/auth/user/block/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImFkbWludXNlciIsInJvbGUiOiJBRE1JTiIsImlzX2FjdGl2ZSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjItMDUtMTNUMDk6NDE6MzQuODIzWiIsInVwZGF0ZWRBdCI6IjIwMjItMDUtMTNUMTM6NDI6MTEuMzczWiJ9LCJpYXQiOjE2NTI0NTAwMTAsImV4cCI6MTY1MjQ1MzYxMH0.sNr_enDIu5Bge2kcJPR4b2W_bE1xdQZCp5VajYJwdUA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW51c2VyMSIsImlzX2FjdGl2ZSI6dHJ1ZX0sImlhdCI6MTY1MzIyMDY0MywiZXhwIjoxNjUzMjI0MjQzfQ.yd51xpKaPVVRvEo9Jq-loE9WiTXl_cJEAPYzNPQJx4c

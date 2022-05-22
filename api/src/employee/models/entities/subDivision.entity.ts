@@ -7,6 +7,8 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -23,4 +25,10 @@ export class SubDivision {
 
   @OneToMany(() => Employee, (employee) => employee.subDivision)
   employees: Employee[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -59,7 +59,7 @@ export class DivisionService {
         return this.findSubDivisionbyDivisionId(division.id).pipe(
           switchMap((subDivision: SubDivision) => {
             if (subDivision) {
-              ErrorHandler.forbiddenDeleteAction('Division');
+              ErrorHandler.forbiddenDeleteAction(division.name);
             }
 
             return this.divisionRepo.remove(division);
@@ -85,7 +85,7 @@ export class DivisionService {
               if (employees.length == 0) {
                 return this.subDivisionRepo.remove(subDivision);
               }
-              ErrorHandler.forbiddenDeleteAction('Subdivision');
+              ErrorHandler.forbiddenDeleteAction(subDivision.name);
             }),
           );
       }),

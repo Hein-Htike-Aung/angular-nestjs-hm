@@ -6,4 +6,7 @@ export interface Division {
     name: string;
 
     subDivisions: SubDivision[];
+    
+    createdAt: Date;
+    updatedAt: Date;
 }
