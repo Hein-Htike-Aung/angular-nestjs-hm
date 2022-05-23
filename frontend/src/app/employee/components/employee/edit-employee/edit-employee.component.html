@@ -1,1 +1,208 @@
-<p>edit-employee works!</p>
+<!-- Title -->
+<div class="page-header mb-5">
+  <mat-icon class="me-1">label_important</mat-icon>
+  <span>Edit Employee</span>
+</div>
+
+<mat-horizontal-stepper linear>
+  <mat-step label="Basic Information" [completed]="basicInfoForm.valid">
+    <form [formGroup]="basicInfoForm">
+      <div class="row">
+        <div class="col">
+          <mat-form-field color="primary" appearance="standard">
+            <mat-label>Name</mat-label>
+            <input
+              type="text"
+              formControlName="name"
+              matInput
+              [errorStateMatcher]="errorMatcher"
+            />
+            <mat-error> Name is required </mat-error>
+          </mat-form-field>
+          <div [formGroup]="contact">
+            <mat-form-field color="primary" appearance="standard">
+              <mat-label>Phone</mat-label>
+              <input
+                type="tel"
+                formControlName="phone"
+                matInput
+                [errorStateMatcher]="errorMatcher"
+              />
+              <mat-error> Phone number is required </mat-error>
+            </mat-form-field>
+            <mat-form-field color="primary" appearance="standard">
+              <mat-label>Email</mat-label>
+              <input
+                type="email"
+                formControlName="email"
+                matInput
+                [errorStateMatcher]="errorMatcher"
+              />
+              <mat-error> Email is required </mat-error>
+            </mat-form-field>
+          </div>
+          <mat-form-field color="primary" appearance="standard">
+            <mat-label>Address</mat-label>
+            <input
+              type="text"
+              formControlName="address"
+              matInput
+              [errorStateMatcher]="errorMatcher"
+            />
+            <mat-error> Address is required </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field color="primary" appearance="outline">
+            <mat-label>Select Division</mat-label>
+            <mat-select formControlName="subDivisonId">
+              <mat-option>Select Division</mat-option>
+              <mat-optgroup *ngFor="let d of divisions" [label]="d.name">
+                <mat-option *ngFor="let sd of d.subDivisions" [value]="sd.id">{{
+                  sd.name
+                }}</mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field color="primary" appearance="outline">
+            <mat-label>Select Position</mat-label>
+            <mat-select formControlName="positionId">
+              <mat-option>Select Position</mat-option>
+              <mat-option *ngFor="let p of positions" [value]="p.id">{{
+                p.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-card class="mb-5">
+        <mat-card-title>Credential Info</mat-card-title>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              <mat-form-field color="primary" appearance="standard">
+                <mat-label>Username</mat-label>
+                <input type="text" matInput formControlName="username" />
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field color="primary" appearance="standard">
+                <mat-label>Password</mat-label>
+                <input type="password" matInput formControlName="password" />
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </form>
+
+    <button
+      mat-raised-button
+      matStepperNext
+      [disabled]="basicInfoForm.invalid"
+      color="primary"
+    >
+      Next
+    </button>
+  </mat-step>
+  <mat-step label="Personal Information">
+    <form [formGroup]="personalInfoForm">
+      <div class="row">
+        <div class="col-4">
+          <div>
+            <img [src]="imageUrl" />
+          </div>
+          <div>
+            <input
+              type="file"
+              #fileUpload
+              hidden
+              (change)="onFileSelect($event)"
+            />
+            <button type="button" mat-raised-button (click)="fileUpload.click()">
+              Upload
+            </button>
+          </div>
+          <div class="mt-4">
+            <button mat-button matStepperPrevious color="primary">
+              Previous
+            </button>
+            <button
+              (click)="save()"
+              [disabled]="personalInfoForm.invalid"
+              mat-raised-button
+              matStepperPrevious
+              color="primary"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Date of birth</mat-label>
+            <input formControlName="dob" matInput [matDatepicker]="dobPicker" />
+            <mat-datepicker-toggle
+              [for]="dobPicker"
+              matSuffix
+            ></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hire Date</mat-label>
+            <input
+              formControlName="hireDate"
+              matInput
+              [matDatepicker]="hireDatePicker"
+            />
+            <mat-datepicker-toggle
+              [for]="hireDatePicker"
+              matSuffix
+            ></mat-datepicker-toggle>
+            <mat-datepicker #hireDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <div>
+            <mat-radio-group formControlName="gender">
+              <mat-radio-button value="MALE" class="me-3"
+                >MALE</mat-radio-button
+              >
+              <mat-radio-button value="FEMALE">FEMALE</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <button
+            mat-flat-button
+            class="my-4"
+            color="primary"
+            (click)="addFamilyMember()"
+          >
+            Add Family Member
+          </button>
+
+          <div formArrayName="familyMember">
+            <div
+              *ngFor="
+                let _ of familyMember.controls;
+                first as f;
+                last as l;
+                index as i
+              "
+            >
+              <div [formGroupName]="i">
+                <mat-form-field color="primary" appearance="outline">
+                  <input type="text" matInput formControlName="member" />
+                  <button (click)="removeFamilyMember(i)" mat-icon-button matSuffix>
+                    <mat-icon>clear</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>

@@ -36,6 +36,10 @@ export class CreateEmployeeDto {
   @ValidateNested()
   @Type(() => ContactInfo)
   contact: ContactInfo;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
   
   @IsDate()
   @IsNotEmpty()
@@ -61,9 +65,9 @@ export class CreateEmployeeDto {
   @IsNotEmpty()
   subDivisonId: number;
   
-  @IsString()
-  @IsOptional()
-  image?: string;
+  // @IsObject()
+  // @IsOptional()
+  // image?: FormData;
   
   @IsEnum(ROLE)
   @IsOptional()

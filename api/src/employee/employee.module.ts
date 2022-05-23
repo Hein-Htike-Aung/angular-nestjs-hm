@@ -1,3 +1,5 @@
+import { AuthModule } from './../auth/auth.module';
+import { User } from './../auth/models/entities/user.entity';
 import { InvoiceModule } from './../invoice/invoice.module';
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,8 +16,9 @@ import { PositionService } from './services/position.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Division, Position, SubDivision, Employee]),
-    forwardRef(() => InvoiceModule)
+    TypeOrmModule.forFeature([Division, Position, SubDivision, Employee, User]),
+    forwardRef(() => InvoiceModule),
+    forwardRef(() => AuthModule)
   ],
   providers: [EmployeeService, PositionService, DivisionService],
   controllers: [EmployeeController, DivisionController, PositionController],

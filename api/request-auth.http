@@ -21,19 +21,17 @@ POST http://localhost:3000/auth/register/employee
 Content-Type: application/json
 
 {
-    "name": "employee-26",
-    "familyMember": ["e1", "e2"],
+    "name": "Employee3",
+    "familyMember": ["bot1", "bot2"],
     "contact": {
-        "phone": "09239634359",
-        "email": "employee26@gmial.com"
+        "phone": "01322233359",
+        "email": "employeee_2@gmial.com"
     },
     "dob": "2000-12-12",
-    "gender": "MALE",
-    "username": "employee26",
-    "password": "employee26",
-    "role": "EMPLOYEE",
-    "positionId": 9,
-    "subDivisonId": 11
+    "gender": "FEMALE",
+    "address": "Mars",
+    "positionId": 16,
+    "subDivisonId": 17
 }
 
 ### Block Employee By id

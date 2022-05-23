@@ -12,9 +12,10 @@ import { DivisionDialogComponent } from './components/division/division-dialog/d
 import { SubDivisionDialogComponent } from './components/sub-division/sub-division-dialog/sub-division-dialog.component';
 import { EmployeeComponent } from './components/employee/employee.component';
 import { EditEmployeeComponent } from './components/employee/edit-employee/edit-employee.component';
+import { EmployeeDetailsDialogComponent } from './components/employee/employee-details-dialog/employee-details-dialog.component';
 
 @NgModule({
-  declarations: [DivisionComponent, PositionComponent, PositionDialogComponent, SubDivisionComponent, DivisionDialogComponent, SubDivisionDialogComponent, EmployeeComponent, EditEmployeeComponent],
+  declarations: [DivisionComponent, PositionComponent, PositionDialogComponent, SubDivisionComponent, DivisionDialogComponent, SubDivisionDialogComponent, EmployeeComponent, EditEmployeeComponent, EmployeeDetailsDialogComponent],
   imports: [
     CommonModule,
     EmployeeRoutingModule,

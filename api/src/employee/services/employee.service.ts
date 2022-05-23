@@ -1,6 +1,8 @@
+import { AuthService } from './../../auth/services/auth.service';
+import { User } from './../../auth/models/entities/user.entity';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { catchError, Observable, switchMap, take, map, of } from 'rxjs';
+import { catchError, Observable, switchMap, take, map, of, tap } from 'rxjs';
 import { from } from 'rxjs';
 import { Repository, UpdateResult } from 'typeorm';
 import { ErrorHandler } from './../../shared/utils/error.handler';
@@ -20,6 +22,8 @@ export class EmployeeService {
     private divisionService: DivisionService,
     @Inject(forwardRef(() => PositionService))
     private positionService: PositionService,
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @Inject(forwardRef(() => AuthService)) private authService: AuthService,
   ) {}
 
   createEmployee(createEmployeeDto: CreateEmployeeDto): Observable<Employee> {
@@ -48,6 +52,54 @@ export class EmployeeService {
     id: number,
     updateEmployeeDto: UpdateEmployeeDto,
   ): Observable<Employee> {
+    return this.checkValidationForUpdateEmployee(id, updateEmployeeDto).pipe(
+      switchMap(({ position, subDivision }) => {
+        // Update Employee with Username
+        if (updateEmployeeDto?.username) {
+          return this.findUsernameByEmployeeId(id).pipe(
+            switchMap((username: string) => {
+
+              console.log(username);
+              
+              return this.authService.findUserWithUsername(username).pipe(
+                tap((user: User) => {
+                  this.userRepo.update(user.id, {
+                    username: updateEmployeeDto.username,
+                  });
+                }),
+                switchMap(() => {
+                  delete updateEmployeeDto.username;
+                  delete updateEmployeeDto.password;
+                  return this.actual_updateEmployee(
+                    id,
+                    position,
+                    subDivision,
+                    updateEmployeeDto,
+                  );
+                }),
+              );
+            }),
+          );
+        } else {
+          // Update Employee without user
+          return this.actual_updateEmployee(
+            id,
+            position,
+            subDivision,
+            updateEmployeeDto,
+          );
+        }
+      }),
+    );
+  }
+
+  checkValidationForUpdateEmployee(
+    id: number,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ): Observable<{
+    position: Position;
+    subDivision: SubDivision;
+  }> {
     return this.findEmployeeById(id).pipe(
       switchMap((_) => {
         return this.positionService
@@ -60,26 +112,47 @@ export class EmployeeService {
                   switchMap((subDivision: SubDivision) => {
                     delete updateEmployeeDto.positionId;
                     delete updateEmployeeDto.subDivisonId;
-                    return from(
-                      this.employeeRepo.update(id, {
-                        position,
-                        subDivision,
-                        ...updateEmployeeDto,
-                      }),
-                    ).pipe(
-                      switchMap((resp: UpdateResult) => {
-                        if (resp.affected != 0)
-                          return this.findEmployeeById(id);
 
-                        throw new Error();
-                      }),
-                    );
+                    return of({ position, subDivision });
                   }),
                 );
             }),
           );
       }),
     );
+  }
+
+  actual_updateEmployee(
+    id: number,
+    position: Position,
+    subDivision: SubDivision,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ): Observable<Employee> {
+    return from(
+      this.employeeRepo.update(id, {
+        position,
+        subDivision,
+        ...updateEmployeeDto,
+      }),
+    ).pipe(
+      switchMap((resp: UpdateResult) => {
+        if (resp.affected != 0) return this.findEmployeeById(id);
+
+        throw new Error();
+      }),
+    );
+  }
+
+  findUsernameByEmployeeId(employeeId: number) {
+    return this.findEmployeeById(employeeId).pipe(
+      switchMap((employee: Employee) => {
+        return this.authService.findUserById(employee?.user?.id).pipe(
+          map((user: User) => {
+            return user.username;
+          }),
+        );
+      }),
+    );  
   }
 
   uploadEmployeeImage(
@@ -130,7 +203,7 @@ export class EmployeeService {
 
   findAllEmployee(): Observable<Employee[]> {
     return from(
-      this.employeeRepo.find({ relations: ['position', 'subDivision'] }),
+      this.employeeRepo.find({ relations: ['position', 'subDivision', 'user'] }),
     );
   }
 

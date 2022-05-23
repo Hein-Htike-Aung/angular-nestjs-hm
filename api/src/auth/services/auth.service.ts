@@ -41,6 +41,7 @@ export class AuthService {
         }
 
         if (createEmployeeDto.username && createEmployeeDto.password) {
+          // Create Employee with User Credential
           return this.employeeService.createEmployee(createEmployeeDto).pipe(
             switchMap((employee: Employee) => {
               return this.hashPassword(createEmployeeDto.password).pipe(
@@ -49,6 +50,7 @@ export class AuthService {
                     this.userRepo.save({
                       username: createEmployeeDto.username,
                       password: hashPassword,
+                      role: createEmployeeDto?.role,
                     }),
                   ).pipe(
                     switchMap((user: User) => {
@@ -61,13 +63,16 @@ export class AuthService {
               );
             }),
           );
+        } else {
+          // Create Employee
+          return this.employeeService.createEmployee(createEmployeeDto);
         }
       }),
     );
   }
 
   findUserWithUsername(username: string) {
-    return from(this.userRepo.findOne({ where: { username } })).pipe(take(1));
+    return from(this.userRepo.findOne({ where: { username: username || '' } })).pipe(take(1));
   }
 
   hashPassword(password: string): Observable<String> {

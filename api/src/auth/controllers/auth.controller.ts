@@ -1,21 +1,20 @@
-import { RolesGuard } from './../guards/roles.guard';
-import { CreateEmployeeDto } from './../../employee/models/dto/create-employee.dto';
-import { ROLE, User } from './../models/entities/user.entity';
-import { Employee } from './../../employee/models/entities/employee.entity';
-import { Observable, tap, map } from 'rxjs';
-import { AuthService } from './../services/auth.service';
 import {
   Body,
   Controller,
   Get,
   Param,
   Patch,
-  Post,
-  UseGuards,
+  Post, UseGuards
 } from '@nestjs/common';
-import { CredentailInfo } from '../models/dto/credential-info.dto';
+import { Observable } from 'rxjs';
 import { PublicRoute } from '../../shared/decorators/public-route.decorator';
 import { Roles } from '../decorators/roles.decorator';
+import { CredentailInfo } from '../models/dto/credential-info.dto';
+import { CreateEmployeeDto } from './../../employee/models/dto/create-employee.dto';
+import { Employee } from './../../employee/models/entities/employee.entity';
+import { RolesGuard } from './../guards/roles.guard';
+import { ROLE, User } from './../models/entities/user.entity';
+import { AuthService } from './../services/auth.service';
 
 @Controller('auth')
 export class AuthController {

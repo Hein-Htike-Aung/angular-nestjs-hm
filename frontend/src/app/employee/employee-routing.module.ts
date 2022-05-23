@@ -11,11 +11,11 @@ const routes: Routes = [
   { path: 'subDivision', component: SubDivisionComponent },
   { path: 'position', component: PositionComponent },
   {
-    path: 'employee',
+    path: 'employees',
     component: EmployeeComponent,
-    children: [{ path: ':id', component: EditEmployeeComponent }],
   },
-  { path: '', redirectTo: 'employee', pathMatch: 'full' },
+  { path: 'edit/:id' , component: EditEmployeeComponent},
+  { path: '', redirectTo: 'employees', pathMatch: 'full' },
 ];
 
 @NgModule({

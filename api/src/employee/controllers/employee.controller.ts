@@ -92,6 +92,13 @@ export class EmployeeController {
     );
   }
 
+  @Get('image/:fileName')
+  findImageByName(@Param('fileName') fileName: string, @Res() res) {
+    if (!fileName || ['null', '[null]'].includes(fileName)) return;
+
+    return res.sendFile(fileName, { root: './images' });
+  }
+
   @Get(':id')
   findById(@Param('id') id: number): Observable<Employee> {
     return this.employeeService.findEmployeeById(id);

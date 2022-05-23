@@ -1,4 +1,4 @@
-import { Observable, take } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 import { Employee, EmployeeRequestPayload } from './../models/employee.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -23,6 +23,18 @@ export class EmployeeService {
       .pipe(take(1));
   }
 
+  uploadEmployeeImage(
+    employeeId: number,
+    formData: FormData
+  ): Observable<{ modifiedFileName: string }> {
+    return this.http
+      .post<{ modifiedFileName: string }>(
+        `${API_URL}/upload-image/${employeeId}`,
+        formData
+      )
+      .pipe(take(1));
+  }
+
   updateEmployee(
     employeeId: number,
     employeeRequestPayload: EmployeeRequestPayload
@@ -33,6 +45,10 @@ export class EmployeeService {
         employeeRequestPayload
       )
       .pipe(take(1));
+  }
+
+  findEmployeeImageByName(imageName: string): Observable<string> {
+    return of(`${API_URL}/image/${imageName}`);
   }
 
   findEmployeeById(employeeId: number): Observable<Employee> {

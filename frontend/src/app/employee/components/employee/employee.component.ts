@@ -21,9 +21,6 @@ export class EmployeeComponent implements OnInit  {
     'subDivision',
     'contact',
     'gender',
-    'familyMember',
-    'dob',
-    'hireDate',
     'actions'
   ];
 

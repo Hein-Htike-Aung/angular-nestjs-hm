@@ -21,6 +21,8 @@ export interface Employee {
 
   contact: ContactInfo;
 
+  address: string;
+
   dob: Date;
 
   hireDate: Date;
@@ -45,9 +47,15 @@ export interface Employee {
 export interface EmployeeRequestPayload {
   name: string;
 
-  familyMember?: string[];
+  positionId: number;
+
+  subDivisonId: number;
 
   contact: ContactInfo;
+
+  address: string;
+  
+  familyMember?: string[];
 
   dob: Date;
 
@@ -55,11 +63,7 @@ export interface EmployeeRequestPayload {
 
   gender: GENDER;
 
-  positionId: number;
-
-  subDivisonId: number;
-
-  image?: string;
+  image?: FormData;
 
   role: ROLE;
 

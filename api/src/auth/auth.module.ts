@@ -3,7 +3,7 @@ import { EmployeeModule } from './../employee/employee.module';
 import { JwtStrategy } from './guards/jwt.strategy';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtGuard } from './guards/jwt.guard';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
@@ -19,10 +19,11 @@ import { User } from './models/entities/user.entity';
         },
       }),
     }),
-    EmployeeModule,
+    forwardRef(() => EmployeeModule),
     TypeOrmModule.forFeature([User])
   ],
   providers: [AuthService, JwtGuard, RolesGuard, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService]
 })
 export class AuthModule {}

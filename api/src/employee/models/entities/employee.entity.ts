@@ -36,6 +36,9 @@ export class Employee {
     email: string;
   };
 
+  @Column()
+  address: string;
+
   @Column({ type: 'date' }) // timestamp in date
   dob: Date;
 

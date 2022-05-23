@@ -12,33 +12,90 @@
         >
       </li>
       <li class="menu">
-        <a (click)="toggleEmployeesMenu()" [routerLink]="['employee']" routerLinkActive="active">
+        <a
+          (click)="toggleEmployeesMenu()"
+          [routerLink]="['employee']"
+          routerLinkActive="active"
+        >
           <h2>
             <mat-icon>supervisor_account</mat-icon>
             <span class="menu-text">Employees</span>
-            <mat-icon class="spinner employee-spinner">keyboard_arrow_left</mat-icon>
+            <mat-icon class="spinner employee-spinner"
+              >keyboard_arrow_left</mat-icon
+            >
           </h2>
         </a>
         <ul class="sub-menu employee-sub-menu">
-          <li><a [routerLink]="['employee/division']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Division</a></li>
-          <li><a [routerLink]="['employee/subDivision']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> SubDivision</a></li>
-          <li><a [routerLink]="['employee/position']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Position</a></li>
-          <li><a [routerLink]="['employee']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Employee</a></li>
+          <li>
+            <a
+              [routerLink]="['employee/division']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Division</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['employee/subDivision']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> SubDivision</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['employee/position']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Position</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['employee/edit', '0']"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Add Employee</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['employee/employees']"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Employee</a
+            >
+          </li>
         </ul>
       </li>
       <li class="menu">
-        <a (click)="toggleProductsMenu()" [routerLink]="['invoice']" routerLinkActive="active">
+        <a
+          (click)="toggleProductsMenu()"
+          [routerLink]="['invoice']"
+          routerLinkActive="active"
+        >
           <h2>
             <mat-icon>view_comfy</mat-icon>
             <span class="menu-text">Products</span>
-            <mat-icon class="spinner product-spinner">keyboard_arrow_left</mat-icon>
+            <mat-icon class="spinner product-spinner"
+              >keyboard_arrow_left</mat-icon
+            >
           </h2>
         </a>
         <ul class="sub-menu product-sub-menu">
-          <li><a [routerLink]="['invoice/product']" routerLinkActive="active" class="mat-body-2"><mat-icon> short_text</mat-icon> Product</a></li>
+          <li>
+            <a
+              [routerLink]="['invoice/product']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Product</a
+            >
+          </li>
         </ul>
       </li>
-      <li class="menu"> 
+      <li class="menu">
         <a>
           <h2>
             <mat-icon>add_shopping_cart</mat-icon>
