@@ -8,7 +8,7 @@ import {
 import { HttpExceptionResponse } from '../models/exception-response.interface';
 import { Request, Response } from 'express';
 
-// @Catch()
+@Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();

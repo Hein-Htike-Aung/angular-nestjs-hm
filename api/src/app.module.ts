@@ -33,8 +33,8 @@ import { BookingModule } from './booking/booking.module';
     BookingModule,
   ],
   providers: [
-    // { provide: APP_FILTER, useClass: AllExceptionFilter },
-    // { provide: APP_GUARD, useClass: JwtGuard },
+    { provide: APP_FILTER, useClass: AllExceptionFilter },
+    { provide: APP_GUARD, useClass: JwtGuard },
   ],
 })
 export class AppModule {}

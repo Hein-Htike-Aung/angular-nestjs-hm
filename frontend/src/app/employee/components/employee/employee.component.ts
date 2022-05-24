@@ -1,3 +1,5 @@
+import { EmployeeDetailsDialogComponent } from './employee-details-dialog/employee-details-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from './../../services/employee.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -11,7 +13,7 @@ import { Employee } from '../../models/employee.model';
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.scss'],
 })
-export class EmployeeComponent implements OnInit  {
+export class EmployeeComponent implements OnInit {
   employees: Employee[] = [];
   employeesDataSource: MatTableDataSource<Employee>;
   displayColumns: string[] = [
@@ -21,7 +23,7 @@ export class EmployeeComponent implements OnInit  {
     'subDivision',
     'contact',
     'gender',
-    'actions'
+    'actions',
   ];
 
   @ViewChild(MatSort) sort: MatSort;
@@ -29,13 +31,13 @@ export class EmployeeComponent implements OnInit  {
 
   constructor(
     private employeeService: EmployeeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) {
     this.getAllEmployees();
   }
-  
-  ngOnInit(): void {
-  }
+
+  ngOnInit(): void {}
 
   filter(filterValue: string) {
     this.employeesDataSource.filter = filterValue.trim().toLocaleLowerCase();
@@ -56,6 +58,25 @@ export class EmployeeComponent implements OnInit  {
       this.employeesDataSource = new MatTableDataSource(this.employees);
       this.employeesDataSource.sort = this.sort;
       this.employeesDataSource.paginator = this.paginator;
+    });
+  }
+
+  showEmployeeDialog(employee: Employee) {
+    this.dialog.open(EmployeeDetailsDialogComponent, {
+      data: {
+        employee
+      },
+      width: '700px'
+    });
+  }
+
+  blockEmployee(employee: Employee) {
+    this.employeeService.blockEmployee(employee.user.id).subscribe({
+      next: () => {
+        this.toastr.info('Successfully Blocked');
+        this.getAllEmployees();
+      },
+      error: (err) => this.toastr.error(err.error.message),
     });
   }
 }

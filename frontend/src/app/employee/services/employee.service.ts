@@ -1,8 +1,9 @@
 import { Observable, of, take } from 'rxjs';
 import { Employee, EmployeeRequestPayload } from './../models/employee.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { User } from '../../auth/models/user.model';
 
 const API_URL = `${environment.API}/employee`;
 
@@ -44,6 +45,12 @@ export class EmployeeService {
         `${API_URL}/update/${employeeId}`,
         employeeRequestPayload
       )
+      .pipe(take(1));
+  }
+
+  blockEmployee(userId: number): Observable<User> {
+    return this.http
+      .patch<User>(`${environment.API}/auth/user/block/${userId}`, {})
       .pipe(take(1));
   }
 

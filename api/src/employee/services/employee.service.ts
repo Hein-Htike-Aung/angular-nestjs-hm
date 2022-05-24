@@ -2,7 +2,16 @@ import { AuthService } from './../../auth/services/auth.service';
 import { User } from './../../auth/models/entities/user.entity';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { catchError, Observable, switchMap, take, map, of, tap } from 'rxjs';
+import {
+  catchError,
+  Observable,
+  switchMap,
+  take,
+  map,
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
 import { from } from 'rxjs';
 import { Repository, UpdateResult } from 'typeorm';
 import { ErrorHandler } from './../../shared/utils/error.handler';
@@ -58,26 +67,55 @@ export class EmployeeService {
         if (updateEmployeeDto?.username) {
           return this.findUsernameByEmployeeId(id).pipe(
             switchMap((username: string) => {
-
-              console.log(username);
-              
-              return this.authService.findUserWithUsername(username).pipe(
-                tap((user: User) => {
-                  this.userRepo.update(user.id, {
+              if (username) {
+                // Update already existed Username
+                return this.authService.findUserWithUsername(username).pipe(
+                  tap((user: User) => {
+                    this.userRepo.update(user.id, {
+                      username: updateEmployeeDto.username,
+                    });
+                  }),
+                  switchMap(() => {
+                    delete updateEmployeeDto.username;
+                    delete updateEmployeeDto.password;
+                    return this.actual_updateEmployee(
+                      id,
+                      position,
+                      subDivision,
+                      updateEmployeeDto,
+                    );
+                  }),
+                );
+              } else {
+                // Update New Username to employee
+                return from(
+                  this.userRepo.save({
                     username: updateEmployeeDto.username,
-                  });
-                }),
-                switchMap(() => {
-                  delete updateEmployeeDto.username;
-                  delete updateEmployeeDto.password;
-                  return this.actual_updateEmployee(
-                    id,
-                    position,
-                    subDivision,
-                    updateEmployeeDto,
-                  );
-                }),
-              );
+                    password: updateEmployeeDto.password,
+                  }),
+                ).pipe(
+                  switchMap((user: User) => {
+                    delete updateEmployeeDto.username;
+                    delete updateEmployeeDto.password;
+                    return from(
+                      this.employeeRepo.update(id, {
+                        position,
+                        subDivision,
+                        user,
+                        ...updateEmployeeDto,
+                      }),
+                    ).pipe(
+                      switchMap((resp: UpdateResult) => {
+                        if (resp.affected != 0)
+                          return this.findEmployeeById(id);
+
+                        throw new Error();
+                      }),
+                    );
+                  }),
+                  catchError(ErrorHandler.duplicationError()),
+                );
+              }
             }),
           );
         } else {
@@ -143,16 +181,19 @@ export class EmployeeService {
     );
   }
 
-  findUsernameByEmployeeId(employeeId: number) {
+  findUsernameByEmployeeId(employeeId: number): Observable<string> {
     return this.findEmployeeById(employeeId).pipe(
       switchMap((employee: Employee) => {
-        return this.authService.findUserById(employee?.user?.id).pipe(
-          map((user: User) => {
-            return user.username;
-          }),
-        );
+        if (employee?.user) {
+          return this.authService.findUserById(employee?.user?.id).pipe(
+            map((user: User) => {
+              return user.username;
+            }),
+          );
+        }
+        return of('');
       }),
-    );  
+    );
   }
 
   uploadEmployeeImage(
@@ -203,7 +244,9 @@ export class EmployeeService {
 
   findAllEmployee(): Observable<Employee[]> {
     return from(
-      this.employeeRepo.find({ relations: ['position', 'subDivision', 'user'] }),
+      this.employeeRepo.find({
+        relations: ['position', 'subDivision', 'user'],
+      }),
     );
   }
 

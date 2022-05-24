@@ -22,6 +22,7 @@ import { ImageStorage } from './../../shared/utils/image-storage';
 import { UpdateEmployeeDto } from './../models/dto/update-employee.dto';
 import { Employee } from './../models/entities/employee.entity';
 import { EmployeeService } from './../services/employee.service';
+import { PublicRoute } from '../../shared/decorators/public-route.decorator';
 
 @Controller('employee')
 export class EmployeeController {
@@ -93,6 +94,7 @@ export class EmployeeController {
   }
 
   @Get('image/:fileName')
+  @PublicRoute()
   findImageByName(@Param('fileName') fileName: string, @Res() res) {
     if (!fileName || ['null', '[null]'].includes(fileName)) return;
 

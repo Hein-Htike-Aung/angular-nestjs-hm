@@ -72,7 +72,9 @@ export class AuthService {
   }
 
   findUserWithUsername(username: string) {
-    return from(this.userRepo.findOne({ where: { username: username || '' } })).pipe(take(1));
+    return from(
+      this.userRepo.findOne({ where: { username: username || '' } }),
+    ).pipe(take(1));
   }
 
   hashPassword(password: string): Observable<String> {
@@ -98,7 +100,7 @@ export class AuthService {
     return from(
       this.userRepo.findOne({
         where: { username },
-        select: ['username', 'password', 'is_active'],
+        select: ['username', 'password', 'role', 'is_active'],
       }),
     ).pipe(
       switchMap((user: User) => {

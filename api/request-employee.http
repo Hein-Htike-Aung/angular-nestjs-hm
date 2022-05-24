@@ -34,3 +34,8 @@ GET http://localhost:3000/employee/image-name/3
 
 ### find Employee's Actual Image
 GET http://localhost:3000/employee/actual-image/2
+
+
+### find Employee
+GET http://localhost:3000/employee/image/716bfe77-3f1b-479d-a42b-71fd3c0ad4cb.jpg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW5hZG1pbiIsInJvbGUiOiJBRE1JTiIsImlzX2FjdGl2ZSI6dHJ1ZX0sImlhdCI6MTY1MzM5MjM4NSwiZXhwIjoxNjUzMzk1OTg1fQ.PUNiuoExjZHgRriNSPNsN2CuSlrcDVC7rNLg1ADpMt0

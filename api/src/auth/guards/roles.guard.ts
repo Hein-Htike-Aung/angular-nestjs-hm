@@ -1,5 +1,9 @@
-import { Employee } from './../../employee/models/entities/employee.entity';
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLES_KEY } from '../decorators/roles.decorator';
@@ -19,11 +23,9 @@ export class RolesGuard implements CanActivate {
 
     if (!requiredRoles) return true;
 
-    const { user }: { user: User } = context
-      .switchToHttp()
-      .getRequest();
+    const { user }: { user: User } = context.switchToHttp().getRequest();
 
-    if(!user) throw new UnauthorizedException("There is no logged in user");
+    if (!user) throw new UnauthorizedException('There is no logged in user');
 
     return requiredRoles.some((role) => user.role?.includes(role));
   }

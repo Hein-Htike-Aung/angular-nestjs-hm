@@ -3,7 +3,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "username": "adminuser1",
+    "username": "adminadmin",
     "password": "admin"
 }
 
@@ -21,16 +21,16 @@ POST http://localhost:3000/auth/register/employee
 Content-Type: application/json
 
 {
-    "name": "Employee3",
+    "name": "Employee2",
     "familyMember": ["bot1", "bot2"],
     "contact": {
-        "phone": "01322233359",
-        "email": "employeee_2@gmial.com"
+        "phone": "0132222359",
+        "email": "employee2@gmial.com"
     },
     "dob": "2000-12-12",
-    "gender": "FEMALE",
-    "address": "Mars",
-    "positionId": 16,
+    "gender": "MALE",
+    "address": "Saturn",
+    "positionId": 9,
     "subDivisonId": 17
 }
 
