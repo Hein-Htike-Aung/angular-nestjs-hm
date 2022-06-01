@@ -16,6 +16,7 @@ import { ProductDialogComponent } from './components/product/product-dialog/prod
 import { ProductDestroyedDialogComponent } from './components/product-destroyed/product-destroyed-dialog/product-destroyed-dialog.component';
 import { PurchaseItemComponent } from './components/purchase-item/purchase-item.component';
 import { AddPurchaseComponent } from './components/purchase-item/add-purchase/add-purchase.component';
+import { PurchaseDetailsComponent } from './components/purchase-item/purchase-details/purchase-details.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AddPurchaseComponent } from './components/purchase-item/add-purchase/ad
     ProductDestroyedDialogComponent,
     PurchaseItemComponent,
     AddPurchaseComponent,
+    PurchaseDetailsComponent,
   ],
   imports: [
     CommonModule,

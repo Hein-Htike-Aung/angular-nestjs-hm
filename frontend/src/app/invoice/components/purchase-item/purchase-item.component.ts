@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,7 +27,7 @@ export class PurchaseItemComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private invoiceService: InvoiceService) {
+  constructor(private invoiceService: InvoiceService, private router: Router) {
     this.getAllInvoices();
   }
 
@@ -50,5 +51,9 @@ export class PurchaseItemComponent implements OnInit {
       this.invoicesDataSource.paginator = this.paginator;
       this.invoicesDataSource.sort = this.sort;
     });
+  }
+
+  showInvoiceDetails(invoice: Invoice) {
+    this.router.navigate(['/private/invoice/purchase-details/', invoice.id]);
   }
 }

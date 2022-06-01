@@ -19,29 +19,6 @@ Content-Type: application/json
     ]
 }
 
-{
-    "supplierId": 1,
-    "purchaseDate": "2022-05-31T09:54:59.587Z",
-    "employeeId": 0,
-    "paymentStatus": "Unpaid",
-    "details": "details",
-    "purchaseItems": [
-        {
-            "productId": 15,
-            "stockQty": 5,
-            "rate": 34,
-            "quantity": 34,
-            "total": "$1,156.00"
-        },
-        {
-            "productId": 12,
-            "stockQty": "",
-            "rate": 3,
-            "quantity": 33,
-            "total": "$99.00"
-        }
-    ]
-}
 
 ### Update Invoice
 PATCH http://localhost:3000/invoice/181

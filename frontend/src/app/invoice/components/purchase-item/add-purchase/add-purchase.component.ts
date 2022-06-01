@@ -1,5 +1,3 @@
-import { EmployeeService } from './../../../../employee/services/employee.service';
-import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -7,16 +5,15 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators,
+  Validators
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, map, Observable, startWith, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, startWith } from 'rxjs';
 import { User } from './../../../../auth/models/user.model';
 import { AuthService } from './../../../../auth/services/auth.service';
-import {
-  InvoiceRequestPayload,
-  PaymentStatus,
-} from './../../../models/invoice.model';
+import { EmployeeService } from './../../../../employee/services/employee.service';
+import { InvoiceRequestPayload } from './../../../models/invoice.model';
 import { Product } from './../../../models/product.model';
 import { Supplier } from './../../../models/supplier.model';
 import { InvoiceService } from './../../../services/invoice.service';
@@ -36,6 +33,7 @@ export class AddPurchaseComponent implements OnInit {
   products: Product[] = [];
   productsFilterOptions: Observable<Product[]>;
   totalAmount = 0;
+  id = 0;
 
   constructor(
     private invoiceService: InvoiceService,
@@ -46,7 +44,8 @@ export class AddPurchaseComponent implements OnInit {
     private productService: ProductService,
     private currencyPipe: CurrencyPipe,
     private router: Router,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.authService.loggedInUser.subscribe((user: User) =>
       this.loggedInUser$.next(user)
@@ -67,25 +66,33 @@ export class AddPurchaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.purchaseItems.controls.forEach((_, index) => {
-      /* Product Input On Changes */
-      this.productsFilterOptions = this.purchaseItems
-        .at(index)
-        .get('productId')
-        .valueChanges.pipe(
-          tap((value) => {
-            this.products.forEach((p) => {
-              if (p.name === value) {
-                this.purchaseItems
-                  .at(index)
-                  .get('stockQty')
-                  .setValue(p.quantity);
-              }
-            });
-          }),
-          startWith(''),
-          map((value) => this._filterProductByName(value))
-        );
+    // For Edit
+    this.activatedRoute.params.subscribe((resp) => {
+      const id = resp['id'];
+      if (id != 0) {
+        this.invoiceService.findInvoiceById(id).subscribe((resp) => {
+          this.id = id;
+
+          const modified_purchaseItems = resp.purchaseItems.map((pi) => ({
+            ...pi,
+            productId: pi.product.name,
+          }));
+
+          // Add required PurchaseItems for FormArray
+          modified_purchaseItems.forEach((_, index) => {
+            if (index !== modified_purchaseItems.length - 1)
+              this.addPurchaseItem();
+          });
+
+          this.invoiceForm.patchValue({
+            ...resp,
+            supplierId: resp.supplier.id,
+            purchaseItems: modified_purchaseItems,
+          });
+
+          this.quantity_rate_onChanges();
+        });
+      }
     });
   }
 
@@ -111,19 +118,64 @@ export class AddPurchaseComponent implements OnInit {
                 });
               });
 
-              this.invoiceService
-                .createInvoice(this.invoiceRequestPayload)
-                .subscribe({
-                  next: (_) => {
-                    this.router.navigateByUrl('/private/invoice/purchase-item');
-                  },
-                  error: (err) => {
-                    console.log(err);
-                    this.toastr.error(err.error.message);
-                  },
-                });
+              if (this.id) {
+                this.invoiceService
+                  .updateInvoice(this.id, this.invoiceRequestPayload)
+                  .subscribe({
+                    next: (_) => {
+                      this.router.navigateByUrl(
+                        '/private/invoice/purchase-item'
+                      );
+                    },
+                    error: (err) => {
+                      this.toastr.error(err.error.message);
+                    },
+                  });
+              } else {
+                this.invoiceService
+                  .createInvoice(this.invoiceRequestPayload)
+                  .subscribe({
+                    next: (_) => {
+                      this.router.navigateByUrl(
+                        '/private/invoice/purchase-item'
+                      );
+                    },
+                    error: (err) => {
+                      this.toastr.error(err.error.message);
+                    },
+                  });
+              }
             });
         });
+    });
+  }
+
+  productNameOnChanges(inputValue: string) {
+    this.purchaseItems.controls.forEach((_, index) => {
+      const productNameControl = this.purchaseItems.at(index).get('productId');
+
+      // Autocomplete
+      this.productsFilterOptions = productNameControl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filterProductByName(value))
+      );
+
+      // Check Duplication
+      if (index !== this.purchaseItems.controls.length - 1) {
+        if (productNameControl.value == inputValue) {
+          this.toastr.warning('Already added');
+          if (inputValue === productNameControl.value) {
+            this.removePurchaseItem(this.purchaseItems.controls.length - 1);
+          }
+        }
+      }
+
+      // Show In Stock Quantity
+      this.products.forEach((p) => {
+        if (p.name === productNameControl.value) {
+          this.purchaseItems.at(index)?.get('stockQty')?.setValue(p.quantity);
+        }
+      });
     });
   }
 

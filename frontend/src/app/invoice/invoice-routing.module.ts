@@ -1,3 +1,4 @@
+import { PurchaseDetailsComponent } from './components/purchase-item/purchase-details/purchase-details.component';
 import { PurchaseItemComponent } from './components/purchase-item/purchase-item.component';
 import { PurchaseItem } from './models/purchase-item.model';
 import { AddPurchaseComponent } from './components/purchase-item/add-purchase/add-purchase.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'destroyed-product', component: ProductDestroyedComponent },
   { path: 'purchase-item', component: PurchaseItemComponent },
   { path: 'add-purchase/:id', component: AddPurchaseComponent },
+  { path: 'purchase-details/:id', component: PurchaseDetailsComponent },
   { path: '', redirectTo: 'product', pathMatch: 'full' }
 ];
 

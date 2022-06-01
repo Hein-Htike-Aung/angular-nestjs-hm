@@ -60,7 +60,7 @@
       <tr *ngFor="let item of purchaseItems?.controls; index as i" [formGroupName]="i" >
         <td>
           <mat-form-field appearance="outline" color="primary">
-            <input type="text" matInput formControlName="productId" [matAutocomplete]="auto" />
+            <input #productInput (focus)="productNameOnChanges(productInput.value)" type="text" matInput formControlName="productId" [matAutocomplete]="auto" />
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
               <mat-option *ngFor="let product of productsFilterOptions | async" [value]="product.name">
                 {{product.name }}
@@ -110,5 +110,5 @@
     </tfoot>
   </table>
 
-  <button mat-raised-button color="primary" (click)="save()">Submit</button>
+  <button mat-raised-button color="primary" [disabled]="invoiceForm.invalid" (click)="save()">Submit</button>
 </form>
