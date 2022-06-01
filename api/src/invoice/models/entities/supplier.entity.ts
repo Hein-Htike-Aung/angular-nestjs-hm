@@ -1,6 +1,6 @@
 import { Invoice } from './invoice.entity';
 import { Min } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Supplier {
@@ -33,4 +33,10 @@ export class Supplier {
 
   @OneToMany(() => Invoice, (invoice) => invoice.supplier)
   invoices: Invoice[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

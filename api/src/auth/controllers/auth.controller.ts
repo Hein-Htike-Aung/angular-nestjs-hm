@@ -4,7 +4,8 @@ import {
   Get,
   Param,
   Patch,
-  Post, UseGuards
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { PublicRoute } from '../../shared/decorators/public-route.decorator';
@@ -39,6 +40,11 @@ export class AuthController {
   @Patch('/user/block/:id')
   blockUser(@Param('id') userId: number): Observable<User> {
     return this.authService.blockUser(userId);
+  }
+
+  @Get('/by-username/:username')
+  findUserWithUsername(@Param('username') username: string): Observable<User> {
+    return this.authService.findUserWithUsername(username);
   }
 
   @Get('/user/:id')

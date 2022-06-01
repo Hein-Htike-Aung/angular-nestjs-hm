@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="productForm">
+       
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Name</mat-label>
+            <input type="text" formControlName="name" matInput [errorStateMatcher]="errorMatcher">
+            <mat-error>
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="categoryId">
+                <mat-option>Select Category</mat-option>
+                <mat-option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</mat-option>
+            </mat-select>
+            <mat-error>
+                Category is required
+            </mat-error>
+        </mat-form-field>
+
+        
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="is_active">
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Quantity</mat-label>
+            <input type="number" formControlName="quantity" matInput >     
+            <mat-error>
+                Quantity must be greater than 0
+            </mat-error>     
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>   
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close mat-dialog-close="true">
+    Close
+  </button>
+  <button [disabled]="productForm.invalid" (click)="save()" mat-button >Save</button>
+</mat-dialog-actions>

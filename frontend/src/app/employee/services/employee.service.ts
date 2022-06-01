@@ -62,6 +62,12 @@ export class EmployeeService {
     return this.http.get<Employee>(`${API_URL}/${employeeId}`).pipe(take(1));
   }
 
+  findEmployeeByUserId(userId: number): Observable<Employee> {
+    return this.http
+      .get<Employee>(`${API_URL}/by-userId/${userId}`)
+      .pipe(take(1));
+  }
+
   findAllEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(`${API_URL}`);
   }

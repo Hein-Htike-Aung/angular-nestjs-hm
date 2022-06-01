@@ -1,0 +1,114 @@
+<!-- Title -->
+<div class="page-header mb-5">
+    <mat-icon class="me-1">label_important</mat-icon>
+    <span>Supplier List</span>
+  </div>
+  
+  <div>
+    <!-- Search -->
+    <mat-form-field style="width: 200px" color="primary">
+      <input
+        #filterInput
+        matInput
+        (input)="filter(filterInput.value)"
+        placeholder="Search Supplier..."
+        type="text"
+      />
+    </mat-form-field>
+  
+    <button
+      style="float: right"
+      mat-raised-button
+      (click)="openDialog('Add New Supplier')"
+    >
+      <mat-icon>add</mat-icon> Add Supplier
+    </button>
+  </div>
+  
+  <!-- Table -->
+  <div class="mat-elevation-z8" [hidden]="suppliers?.length === 0">
+    <table mat-table matSort [dataSource]="suppliersDataSource">
+      <ng-container matColumnDef="id">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>SL</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="name">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.phone }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.email }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Address</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.address }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalAmount">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Total Amount</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.totalAmount }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dueAmount">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Due Amount</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.dueAmount }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="paidAmount">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>Paid Amount</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.paidAmount }}
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button (click)="openDialog('Edit Supplier', element)" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="openPaymentDialog(element)" mat-icon-button>
+            <mat-icon class="money"> attach_money</mat-icon>
+          </button>
+          <button (click)="delete(element)" mat-icon-button color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+  
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No matching data</td>
+      </tr>
+    </table>
+  
+    <mat-paginator
+      color="primary"
+      showFirstLastButtons
+      [pageSizeOptions]="[10, 20, 30, 40]"
+    ></mat-paginator>
+  </div>
+  

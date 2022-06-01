@@ -110,4 +110,10 @@ export class EmployeeController {
   findAllEmployee(): Observable<Employee[]> {
     return this.employeeService.findAllEmployee();
   }
+
+  @Get('by-userId/:userId')
+  findEmployeeByUserId(@Param('userId') userId: number): Observable<Employee> {
+    return this.employeeService.findEmployeeByUserId(userId);
+  }
+  
 }

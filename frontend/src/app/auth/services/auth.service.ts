@@ -71,9 +71,17 @@ export class AuthService {
     );
   }
 
+  findUserWithUsername(username: string): Observable<User> {
+    return this.http.get<User>(`${API_URL}/by-username/${username}`).pipe(take(1));
+  }
+
   get isUserLoggedIn(): Observable<boolean> {
     return this.user$
       .asObservable()
       .pipe(switchMap((user: User) => of(user !== null)));
+  }
+
+  get loggedInUser(): Observable<User> {
+    return this.user$.asObservable().pipe(take(1));
   }
 }

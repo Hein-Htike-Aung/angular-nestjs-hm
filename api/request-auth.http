@@ -37,3 +37,6 @@ Content-Type: application/json
 ### Block Employee By id
 PATCH http://localhost:3000/auth/user/block/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW51c2VyMSIsImlzX2FjdGl2ZSI6dHJ1ZX0sImlhdCI6MTY1MzIyMDY0MywiZXhwIjoxNjUzMjI0MjQzfQ.yd51xpKaPVVRvEo9Jq-loE9WiTXl_cJEAPYzNPQJx4c
+
+### find user by username
+GET http://localhost:3000/auth/by-username/adminadmin

@@ -196,6 +196,12 @@ export class EmployeeService {
     );
   }
 
+  findEmployeeByUserId(userId: number): Observable<Employee> {
+    return from(
+      this.employeeRepo.findOne({ where: { user: { id: userId } } }),
+    ).pipe(take(1));
+  }
+
   uploadEmployeeImage(
     employeeId: number,
     fileName: string,

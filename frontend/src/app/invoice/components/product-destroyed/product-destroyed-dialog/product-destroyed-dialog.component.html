@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Destroy Product</h2>
+<mat-dialog-content>
+    <form [formGroup]="destroyProductForm">
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Category</mat-label>
+            <mat-select (selectionChange)="categoryOnChanges($event.value)">
+                <mat-option>Select Category</mat-option>
+                <mat-option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</mat-option>
+            </mat-select>
+            <mat-error>
+                Category is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Product</mat-label>
+            <mat-select formControlName="productId" (selectionChange)="productOnChanges($event.value)" >
+                <mat-option>Select Product</mat-option>
+                <mat-option *ngFor="let p of products" [value]="p.id">{{ p.name }}</mat-option>
+            </mat-select>
+            <mat-error>
+                Product is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Available Quantity</mat-label>
+            <input type="number" matInput [value]="product?.quantity" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Destroyed Quantity</mat-label>
+            <input type="number" matInput formControlName="destroyedQuantity">
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>   
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close mat-dialog-close="true">
+    Close
+  </button>
+  <button [disabled]="destroyProductForm.invalid" (click)="save()" mat-button >Save</button>
+</mat-dialog-actions>

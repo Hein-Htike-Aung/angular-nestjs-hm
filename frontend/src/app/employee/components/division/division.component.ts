@@ -53,39 +53,20 @@ export class DivisionComponent implements OnInit {
     }
   }
 
-  addNew() {
+  openDialog(title: string, division?: Division) {
     this.dialog
       .open(DivisionDialogComponent, {
         data: {
-          title: 'Add New Division',
-        },
-        position: {
-          top: '20px',
-        },
-      })
-      .afterClosed()
-      .subscribe((resp) => {
-        if (resp === 'save') {
-          this.getAllDivisions();
-        }
-      });
-  }
-
-  edit(division: Division) {
-    this.dialog
-      .open(DivisionDialogComponent, {
-        data: {
-          title: 'Edit Division',
+          title,
           division,
         },
         position: {
           top: '20px',
         },
+        width: '500px',
       })
       .afterClosed()
-      .subscribe((resp) => {
-        if (resp === 'edit') this.getAllDivisions();
-      });
+      .subscribe(() => this.getAllDivisions());
   }
 
   delete(division: Division) {

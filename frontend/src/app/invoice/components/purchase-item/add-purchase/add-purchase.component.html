@@ -1,0 +1,114 @@
+<!-- Title -->
+<div class="page-header mb-5">
+  <mat-icon class="me-1">label_important</mat-icon>
+  <span>Purchase Item</span>
+</div>
+
+<form [formGroup]="invoiceForm">
+  <div class="d-flex justify-content-start gap-5 form-header">
+    <div>
+      <mat-form-field>
+        <mat-label>Supplier</mat-label>
+        <mat-select formControlName="supplierId">
+          <mat-form-field appearance="outline" class="input">
+            <input
+              type="text"
+              matInput
+              #supplierInput
+              (input)="supplierValueOnChanges(supplierInput.value)"
+              placeholder="Search Supplier"
+            />
+          </mat-form-field>
+          <mat-option *ngFor="let s of suppliers" [value]="s.id">{{ s.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Purchase Date</mat-label>
+      <input matInput [matDatepicker]="purchaseDate" formControlName="purchaseDate" />
+      <mat-datepicker-toggle
+        [for]="purchaseDate"
+        matSuffix
+      ></mat-datepicker-toggle>
+      <mat-datepicker #purchaseDate></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Details</mat-label>
+      <input type="text" matInput formControlName="details" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Payment</mat-label>
+      <mat-select formControlName="paymentStatus">        
+        <mat-option value="Paid">Paid</mat-option>
+        <mat-option value="Unpaid">Unpaid</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <table formArrayName="purchaseItems" >
+    <thead>
+      <tr>
+        <th>Item Information</th>
+        <th>Stock/Qty</th>
+        <th>Quantity</th>
+        <th>Rate</th>
+        <th>Total</th>
+        <th style="width: 75px">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of purchaseItems?.controls; index as i" [formGroupName]="i" >
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="text" matInput formControlName="productId" [matAutocomplete]="auto" />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let product of productsFilterOptions | async" [value]="product.name">
+                {{product.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="text" matInput formControlName="stockQty" readonly />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="number" (input)="quantity_rate_onChanges()" matInput formControlName="quantity" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="number" (input)="quantity_rate_onChanges()" matInput formControlName="rate" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="text" matInput readonly formControlName="total" />
+          </mat-form-field>
+        </td>
+        <td>
+          <button mat-raised-button (click)="removePurchaseItem(i)" color="warn">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <button (click)="addPurchaseItem()" mat-raised-button>Add More Item</button>
+        </td>
+        <td></td>
+        <td></td>
+        <td class="grandtotal">Grand Total :</td>
+        <td>
+          <mat-form-field appearance="outline" color="primary">
+            <input type="text" [value]="totalAmount | currency" matInput />
+          </mat-form-field>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <button mat-raised-button color="primary" (click)="save()">Submit</button>
+</form>

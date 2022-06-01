@@ -62,41 +62,19 @@ export class PositionComponent implements OnInit {
     });
   }
 
-  addNew() {
+  optionDialog(title: string, position?: Position) {
     this.dialog
       .open(PositionDialogComponent, {
         data: {
-          title: 'Add New Position',
-        },
-        position: {
-          top: '20px',
-        }
-      })
-      .afterClosed()
-      .subscribe((resp) => {
-        if (resp === 'save') {
-          this.getAllPositions();
-        }
-      });
-  }
-
-  edit(position: Position) {
-    this.dialog
-      .open(PositionDialogComponent, {
-        data: {
-          title: 'Edit Position',
+          title,
           position,
         },
         position: {
           top: '20px',
-        }
+        },
       })
       .afterClosed()
-      .subscribe((resp) => {
-        if (resp === 'edit') {
-          this.getAllPositions();
-        }
-      });
+      .subscribe(() => this.getAllPositions());
   }
 
   delete(position: Position) {

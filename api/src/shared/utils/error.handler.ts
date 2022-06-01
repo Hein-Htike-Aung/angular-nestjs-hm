@@ -41,6 +41,16 @@ export class ErrorHandler {
     );
   }
 
+  static forbiddenAction(message: string) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_ACCEPTABLE,
+        message: `${message}`,
+      },
+      HttpStatus.NOT_ACCEPTABLE,
+    );
+  }
+
   static throwUnAuthorizeException(message?: string) {
     throw new HttpException(
       {

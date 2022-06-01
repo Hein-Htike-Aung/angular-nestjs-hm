@@ -32,18 +32,28 @@ Content-Type: application/json
 
 {
     "name": "Quilt Cover",
-    "categoryId": 4
+    "categoryId": 5
 }
 
 
 ### Update product
 PATCH http://localhost:3000/product/5
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW5hZG1pbiIsInJvbGUiOiJBRE1JTiIsImlzX2FjdGl2ZSI6dHJ1ZX0sImlhdCI6MTY1MzUzNzc2NywiZXhwIjoxNjUzNTQxMzY3fQ.w7TOo7n0WthW15b5kcgBORSB4gzNo22CrS02KuJHI8Y
 
 {
     "name": "Updateed product",
+    "quantity": 20,
     "categoryId": 2
 }
+
+### Destroyed Product
+PATCH http://localhost:3000/product/destroyed-product/5
+Content-Type: application/json
+ 
+ {
+     "destroyedQuantity": 10
+ }
 
 ### Delete product
 DELETE http://localhost:3000/product/6

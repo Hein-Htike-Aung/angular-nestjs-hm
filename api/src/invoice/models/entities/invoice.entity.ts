@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Employee } from './../../../employee/models/entities/employee.entity';
 import { Supplier } from './supplier.entity';
@@ -43,4 +44,10 @@ export class Invoice {
     onDelete: 'CASCADE'
   })
   purchaseItems: PurchaseItem[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

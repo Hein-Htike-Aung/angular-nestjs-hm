@@ -41,7 +41,12 @@ export class ProductService {
     updateProductDto: UpdateProductDto,
   ): Observable<Product> {
     return this.findProductById(id).pipe(
-      switchMap((_) => {
+      switchMap((storedProduct) => {
+        if (storedProduct.quantity < updateProductDto.destroyed)
+          ErrorHandler.forbiddenAction(
+            'Destroyed quantity is exceeded than available quantity',
+          );
+
         return this.categoryService
           .findCategoryById(updateProductDto.categoryId)
           .pipe(
@@ -62,17 +67,43 @@ export class ProductService {
     );
   }
 
-  deleteProduct(productId: number): Observable<Product> {
-    return this.invoiceService.findPurchaseItemsByProductId(productId).pipe(
-      switchMap((purchaseItems: PurchaseItem[]) => {
-        console.log(33, purchaseItems.length);
-        if (purchaseItems.length === 0) {
-          return this.findProductById(productId).pipe(
-            switchMap((product: Product) => this.productRepo.remove(product)),
+  destroyedProductById(productId: number, destroyedQuantity: number) {
+    return this.findProductById(productId).pipe(
+      switchMap((product: Product) => {
+        if (product.quantity < destroyedQuantity)
+          throw ErrorHandler.forbiddenAction(
+            'Destroyed Quantity is exceeded than available quantity',
           );
-        }
 
-        ErrorHandler.forbiddenDeleteAction('Product');
+        delete product.purchaseItems;
+
+        return from(
+          this.productRepo.update(productId, {
+            ...product,
+            destroyed: product.destroyed + destroyedQuantity,
+            quantity: product.quantity - destroyedQuantity,
+          }),
+        ).pipe(
+          switchMap((resp: UpdateResult) => {
+            if (resp.affected != 0) return this.findProductById(productId);
+          }),
+        );
+      }),
+    );
+  }
+
+  deleteProduct(productId: number): Observable<Product> {
+    return this.findProductById(productId).pipe(
+      switchMap((product: Product) => {
+        return this.invoiceService.findPurchaseItemsByProductId(productId).pipe(
+          switchMap((purchaseItems: PurchaseItem[]) => {
+            if (purchaseItems.length === 0 && product.quantity == 0) {
+              return this.productRepo.remove(product);
+            }
+
+            ErrorHandler.forbiddenDeleteAction('Product');
+          }),
+        );
       }),
     );
   }

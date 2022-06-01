@@ -32,6 +32,14 @@ export class ProductController {
     return this.productService.updateProduct(id, updateProductDto);
   }
 
+  @Patch('destroyed-product/:id')
+  destroyedProduct(
+    @Param('id') id: number,
+    @Body() body: { destroyedQuantity: number },
+  ) {
+    return this.productService.destroyedProductById(id, body.destroyedQuantity);
+  }
+
   @Delete(':id')
   deleteProduct(@Param('id') id: number): Observable<Product> {
     return this.productService.deleteProduct(id);
@@ -40,6 +48,13 @@ export class ProductController {
   @Get(':id')
   findProductById(@Param('id') id: number): Observable<Product> {
     return this.productService.findProductById(id);
+  }
+
+  @Get('by-category/:categoryId')
+  findProductsByCategory(
+    @Param('categoryId') categoryId: number,
+  ): Observable<Product[]> {
+    return this.productService.findProductsByCategoryId(categoryId);
   }
 
   @Get()

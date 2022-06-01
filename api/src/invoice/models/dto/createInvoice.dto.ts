@@ -41,5 +41,5 @@ export class CreateInvoiceDto {
   @ValidateNested()
   @IsArray()
   @Type(() => CreatePurchaseItemDto)
-  createPurchaseItemDto?: CreatePurchaseItemDto[];
+  purchaseItems?: CreatePurchaseItemDto[];
 }

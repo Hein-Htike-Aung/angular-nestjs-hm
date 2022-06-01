@@ -41,14 +41,15 @@ export class InvoiceService {
     private supplierService: SupplierService,
   ) {}
 
+  // Save & Update Invoice
   saveInvoice(
     createInvoiceDto: CreateInvoiceDto | UpdateInvoiceDto,
     id?: number,
   ): Observable<Invoice> {
-    const { createPurchaseItemDto, ...invoice } = createInvoiceDto;
+    const { purchaseItems, ...invoice } = createInvoiceDto;
     
     // map CreatePurchaseItemDto[] -> PurchaseItem[]
-    return of(createPurchaseItemDto).pipe(
+    return of(purchaseItems).pipe(
       mergeMap((resp: CreatePurchaseItemDto[]) => {
         return forkJoin(
           resp.map((item) =>

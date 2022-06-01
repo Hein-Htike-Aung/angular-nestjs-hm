@@ -1,0 +1,55 @@
+.form-header {
+  mat-form-field {
+    width: 250px !important;
+  }
+}
+
+.input {
+  width: 100% !important;
+  padding: 5px;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+
+  thead {
+    th {
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  }
+
+  tbody,
+  tfoot {
+    ::ng-deep .mat-form-field-flex > .mat-form-field-infix {
+      padding: 0.7em 0px !important;
+    }
+    ::ng-deep .mat-form-field-label-wrapper {
+      top: -1.5em;
+    }
+
+    ::ng-deep
+      .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+      .mat-form-field-label {
+      transform: translateY(-1.1em) scale(0.75);
+      width: 133.33333%;
+    }
+
+    tr {
+      td:last-child {
+        padding-bottom: 18.5px;
+        text-align: center;
+      }
+    }
+  }
+
+  mat-form-field {
+    padding: 0 2px;
+  }
+}
+
+.grandtotal {
+  float: right;
+  padding: 15px 15px 0 0;
+}

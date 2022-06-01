@@ -55,29 +55,11 @@ export class SubDivisionComponent implements OnInit {
     });
   }
 
-  addNew() {
+  openDialog(title: string, subDivision?: SubDivision) {
     this.dialog
       .open(SubDivisionDialogComponent, {
         data: {
-          title: 'Add New SubDivision',
-        },
-        position: {
-          top: '20px',
-        },
-      })
-      .afterClosed()
-      .subscribe((resp) => {
-        if (resp === 'save') {
-          this.getAllSubDivision();
-        }
-      });
-  }
-
-  edit(subDivision: SubDivision) {
-    this.dialog
-      .open(SubDivisionDialogComponent, {
-        data: {
-          title: 'Edit SubDivision',
+          title,
           subDivision,
         },
         position: {
@@ -86,7 +68,7 @@ export class SubDivisionComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((resp) => {
-        if (resp == 'edit') {
+        if (resp === 'save') {
           this.getAllSubDivision();
         }
       });

@@ -88,23 +88,65 @@
               [routerLink]="['invoice/product']"
               routerLinkActive="active"
               class="mat-body-2"
-              ><mat-icon> short_text</mat-icon> Product</a
+              ><mat-icon> short_text</mat-icon> Product List</a
             >
+          </li>
+          <li>
+            <a
+              [routerLink]="['invoice/destroyed-product']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Destroyed List</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['invoice/category']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Category List</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['invoice/supplier']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Supplier List</a
+            >
+          </li>
+          <li class="menu">
+            <a (click)="togglePurchaseMenu()" [routerLink]="['invoice']">
+              <h2>
+                <mat-icon>short_text</mat-icon>
+                <span class="menu-text">Purchase</span>
+                <mat-icon class="spinner employee-spinner"
+                  >keyboard_arrow_left</mat-icon
+                >
+              </h2>
+            </a>
+            <ul class="sub-menu purchase-sub-menu">
+              <li>
+                <a
+                  [routerLink]="['invoice/add-purchase', 0]"
+                  routerLinkActive="active"
+                  class="mat-body-2"
+                  ><mat-icon> short_text</mat-icon> Add Purchase</a
+                >
+              </li>
+              <li>
+                <a
+                  [routerLink]="['invoice/purchase-item']"
+                  routerLinkActive="active"
+                  class="mat-body-2"
+                  ><mat-icon> short_text</mat-icon> Purchase Item</a
+                >
+              </li>
+            </ul>
           </li>
         </ul>
       </li>
-      <li class="menu">
-        <a>
-          <h2>
-            <mat-icon>add_shopping_cart</mat-icon>
-            <span class="menu-text">Purchase</span>
-            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
-          </h2>
-        </a>
-        <ul>
-          <li></li>
-        </ul>
-      </li>
+
       <li class="menu">
         <a>
           <h2>

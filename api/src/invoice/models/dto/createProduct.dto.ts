@@ -18,7 +18,12 @@ export class CreateProductDto {
 
   @IsBoolean()
   @IsOptional()
-  active: boolean;
+  is_active: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  destroyed: number;
 
   @IsNumber()
   @Min(0)

@@ -11,7 +11,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from './../../../services/employee.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { from, of, switchMap, tap } from 'rxjs';
 import { FileTypeResult } from 'file-type';
 import { fromBuffer } from 'file-type/core';
@@ -24,7 +24,7 @@ type validMimeType = 'image/png' | 'image/jpg' | 'image/jpeg';
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.scss'],
 })
-export class EditEmployeeComponent implements OnInit {
+export class EditEmployeeComponent implements OnInit, AfterViewInit {
   basicInfoForm: FormGroup;
   personalInfoForm: FormGroup;
   employeeRequestPayload: EmployeeRequestPayload;
@@ -46,7 +46,8 @@ export class EditEmployeeComponent implements OnInit {
     private builder: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     this.basicInfoForm = this.builder.group({
       name: ['', Validators.required],
@@ -69,29 +70,42 @@ export class EditEmployeeComponent implements OnInit {
       image: {},
     });
 
-    this.activatedRoute.params.subscribe((params) => {
-      this.employeeService.findEmployeeById(params['id']).subscribe((resp) => {
-        this.employee = resp;
-        this.basicInfoForm.patchValue({
-          ...this.employee,
-          positionId: this.employee.position.id,
-          subDivisonId: this.employee.subDivision.id,
-          username: this.employee?.user?.username,
-        });
-        this.personalInfoForm.patchValue({
-          ...this.employee,
-        });
-        this.employee.familyMember.forEach((fm) => this.addFamilyMember(fm));
-        this.employeeService
-          .findEmployeeImageByName(this.employee.image)
-          .subscribe((imagePath: string) => {
-            this.imageUrl = imagePath;
-          });
-      });
-    });
-
     this.getAllPosition();
     this.getAllDivision();
+  }
+  ngAfterViewInit(): void {
+    this.activatedRoute.params.subscribe((params) => {
+      if (params['id'] != 0) {
+        this.employeeService
+          .findEmployeeById(params['id'])
+          .subscribe((resp) => {
+            this.employee = resp;
+            this.basicInfoForm.patchValue({
+              ...this.employee,
+              positionId: this.employee.position.id,
+              subDivisonId: this.employee.subDivision.id,
+              username: this.employee?.user?.username,
+            });
+            this.personalInfoForm.patchValue({
+              ...this.employee,
+            });
+            this.employee.familyMember.forEach((fm) =>
+              this.addFamilyMember(fm)
+            );
+            this.employeeService
+              .findEmployeeImageByName(this.employee.image)
+              .subscribe((imagePath: string) => {
+                this.imageUrl = imagePath;
+              });
+          });
+      }else {
+        this.employee = null;
+        this.basicInfoForm.reset();
+        this.personalInfoForm.reset();
+        this.imageUrl = '../../../../../assets/images/default-image.png';
+      }
+      this.cdr.detectChanges();
+    });
   }
 
   addFamilyMember(value?: string) {
