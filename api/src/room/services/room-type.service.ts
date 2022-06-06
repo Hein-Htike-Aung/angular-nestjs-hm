@@ -42,18 +42,11 @@ export class RoomTypeService {
     );
   }
 
-  addRoomImage(
-    roomTypeId: number,
-    fileName: string,
-  ): Observable<{ modifiedFileName: string }> {
+  addRoomImage(roomTypeId: number, fileName: string): Observable<RoomImage> {
     return this.findRoomTypeById(roomTypeId).pipe(
       switchMap((roomType: RoomType) => {
         return from(
           this.roomImageRepo.save({ room_type: roomType, image: fileName }),
-        ).pipe(
-          map((_) => {
-            return { modifiedFileName: fileName };
-          }),
         );
       }),
     );
@@ -63,7 +56,7 @@ export class RoomTypeService {
     roomTypeId: number,
     roomImageId: number,
     fileName: string,
-  ): Observable<{ modifiedFileName: string }> {
+  ): Observable<RoomImage> {
     return this.findRoomTypeById(roomTypeId).pipe(
       switchMap((room_type: RoomType) => {
         return this.findRoomImageById(roomImageId).pipe(
@@ -74,8 +67,9 @@ export class RoomTypeService {
                 image: fileName,
               }),
             ).pipe(
-              map((resp: UpdateResult) => {
-                if (resp.affected != -1) return { modifiedFileName: fileName };
+              switchMap((resp: UpdateResult) => {
+                if (resp.affected != -1)
+                  return this.findRoomImageById(roomImageId);
               }),
             );
           }),
@@ -85,7 +79,12 @@ export class RoomTypeService {
   }
 
   findRoomTypeById(id: number): Observable<RoomType> {
-    return from(this.roomTypeRepo.findOneOrFail({ where: { id } })).pipe(
+    return from(
+      this.roomTypeRepo.findOneOrFail({
+        where: { id },
+        relations: ['roomImages'],
+      }),
+    ).pipe(
       take(1),
       catchError(ErrorHandler.entityNotFoundError(id, 'RoomType')),
     );

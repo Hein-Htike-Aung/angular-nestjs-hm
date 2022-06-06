@@ -16,7 +16,7 @@ import { RoomType } from '../../models/room-type.model';
 })
 export class RoomTypeComponent implements OnInit {
   roomTypes: RoomType[];
-  displayColumns: string[] = ['id', 'roomType', 'actions'];
+  displayColumns: string[] = ['id', 'roomType', 'roomImages', 'actions'];
   roomTypesDataSource: MatTableDataSource<RoomType>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -54,6 +54,10 @@ export class RoomTypeComponent implements OnInit {
     if (this.roomTypesDataSource.paginator) {
       this.roomTypesDataSource.paginator.firstPage();
     }
+  }
+
+  getImageUrlByImageName(imageName: string) {
+    return this.roomTypeService.findRoomImageByName(imageName);
   }
 
   openDialog(title: string, roomType?: RoomType) {

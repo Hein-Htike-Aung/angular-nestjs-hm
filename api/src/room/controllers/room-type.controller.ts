@@ -1,3 +1,4 @@
+import { RoomImage } from './../models/entities/room-image.entity';
 import { Observable, of, switchMap } from 'rxjs';
 import { RoomTypeService } from './../services/room-type.service';
 import {
@@ -9,6 +10,7 @@ import {
   Get,
   UseInterceptors,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { CreateRoomTypeDto } from '../models/dto/createRoomType.dto';
 import { RoomType } from '../models/entities/room-type.entity';
@@ -17,6 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageStorage } from '../../shared/utils/image-storage';
 import { join } from 'path';
 import { ErrorHandler } from '../../shared/utils/error.handler';
+import { PublicRoute } from '../../shared/decorators/public-route.decorator';
 
 @Controller('room-type')
 export class RoomTypeController {
@@ -57,9 +60,7 @@ export class RoomTypeController {
     | {
         error: string;
       }
-    | {
-        modifiedFileName: string;
-      }
+    | RoomImage
   > {
     const fileName = file?.filename;
     // fileName = 94099d67-5992-42ec-9e42-b7c594c5ee93.png
@@ -82,7 +83,7 @@ export class RoomTypeController {
     );
   }
 
-  @Post('update-image/:roomTypeId/:roomImageId')
+  @Patch('update-image/:roomTypeId/:roomImageId')
   @UseInterceptors(FileInterceptor('file', ImageStorage.saveImage()))
   updateRoomImage(
     @UploadedFile() file: Express.Multer.File,
@@ -92,9 +93,7 @@ export class RoomTypeController {
     | {
         error: string;
       }
-    | {
-        modifiedFileName: string;
-      }
+    | RoomImage
   > {
     const fileName = file?.filename;
     // fileName = 94099d67-5992-42ec-9e42-b7c594c5ee93.png
@@ -108,12 +107,40 @@ export class RoomTypeController {
     return ImageStorage.isImagePathSafe(imagePath).pipe(
       switchMap((isFileLegit) => {
         if (isFileLegit) {
-          return this.roomTypeService.addRoomImage(roomTypeId, fileName);
+          return this.roomTypeService.updateRoomImage(
+            roomTypeId,
+            roomImageId,
+            fileName,
+          );
         }
 
         ImageStorage.removeFile(imagePath);
         throw ErrorHandler.throwInvalidImage();
       }),
     );
+  }
+
+  // Actual Image by roomImageId
+  @Get('actual-image/:roomImageId')
+  findRoomActualImageByRoomImageId(
+    @Param('roomImageId') roomImageId: number,
+    @Res() res,
+  ): Observable<Object> {
+    return this.roomTypeService.findRoomImageById(roomImageId).pipe(
+      switchMap(({ image }) => {
+        if (image === null) ErrorHandler.throwUnexistingRoomImage(roomImageId);
+
+        return of(res.sendFile(image, { root: './images' }));
+      }),
+    );
+  }
+
+  // Actual Image by image name
+  @Get('room-image/:fileName')
+  @PublicRoute()
+  findRoomImageByName(@Param('fileName') fileName: string, @Res() res) {
+    if (!fileName || ['null', '[null]'].includes(fileName)) return;
+
+    return res.sendFile(fileName, { root: './images' });
   }
 }

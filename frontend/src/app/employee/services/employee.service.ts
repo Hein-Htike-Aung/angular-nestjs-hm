@@ -56,7 +56,7 @@ export class EmployeeService {
 
   findEmployeeImageByName(imageName: string): Observable<string> {
     return of(`${API_URL}/image/${imageName}`);
-  }
+  } 
 
   findEmployeeById(employeeId: number): Observable<Employee> {
     return this.http.get<Employee>(`${API_URL}/${employeeId}`).pipe(take(1));

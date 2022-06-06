@@ -4,33 +4,26 @@
 </div>
 
 <div>
-    <h1>RoomType: {{ roomType?.roomType }}</h1>
+  <h1>RoomType: {{ roomType?.roomType }}</h1>
 </div>
 
 <div class="d-flex justify-content-between">
-    <img (click)="fileUpload1.click()" style="cursor: pointer;" [src]="imageUrl1" />
-    <input
-    type="file"
-    #fileUpload1
-    hidden
-    (change)="onImageSelect($event, 'image1')"
-  />
-    <img (click)="fileUpload2.click()" style="cursor: pointer;" [src]="imageUrl2" />
-    <input
-    type="file"
-    #fileUpload2
-    hidden
-    (change)="onImageSelect($event, 'image2')"
-  />
-    <img (click)="fileUpload3.click()" style="cursor: pointer;" [src]="imageUrl3" />
-    <input
-    type="file"
-    #fileUpload3
-    hidden
-    (change)="onImageSelect($event, 'image3')"
-  />
+  <span *ngFor="let item of images.controls; index as i">
+    <img
+      (click)="fileUpload.click()"
+      style="cursor: pointer"
+      [src]="
+        item.value.image
+          ? (getImageUrlByImageName(item.value.image) | async)
+          : defualtImageUrl
+      "
+    />
+    <input type="file" #fileUpload hidden (change)="onImageSelect($event, item.value)" />
+  </span>
 </div>
 
 <div>
-    <button routerLink="/private/room/room-type" mat-raised-button>Go Back</button>
+  <button routerLink="/private/room/room-type" mat-raised-button>
+    Go Back
+  </button>
 </div>

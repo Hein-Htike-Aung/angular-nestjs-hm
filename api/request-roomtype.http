@@ -21,3 +21,11 @@ Content-Type: application/json
 {
     "roomType": "VIP"
 }
+
+
+### find Room's Actual Image by RoomImage id
+GET http://localhost:3000/room-type/actual-image/1
+
+
+### find Room's Actual Image by image name
+GET http://localhost:3000/room-type/room-image/2331aa69-077a-4cd1-9a76-36bc3b0bf1ec.png

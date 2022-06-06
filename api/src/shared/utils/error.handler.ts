@@ -90,4 +90,14 @@ export class ErrorHandler {
       HttpStatus.NOT_FOUND,
     );
   }
+
+  static throwUnexistingRoomImage(id: number) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        message: `No image found for this room (id - ${id})`,
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
 }

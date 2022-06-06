@@ -6,10 +6,10 @@ import { Room } from './room.entity';
 export class RoomImage {
   
   @PrimaryGeneratedColumn()
-  private id: number;
+  id: number;
 
   @Column({ nullable: true })
-  private image: string;
+  image: string;
 
   @ManyToOne(() => RoomType, (roomType) => roomType.roomImages)
   room_type: RoomType;

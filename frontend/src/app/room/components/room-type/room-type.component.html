@@ -40,6 +40,15 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="roomImages">
+      <th mat-sort-header mat-header-cell *matHeaderCellDef>Room Images</th>
+      <td mat-cell *matCellDef="let element">
+        <span *ngFor="let image of element.roomImages">
+          <img class="room-image" [src]="getImageUrlByImageName(image.image) | async" />
+        </span>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let element">
