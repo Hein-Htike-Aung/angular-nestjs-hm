@@ -1,0 +1,23 @@
+### Create RoomType
+POST http://localhost:3000/room-type
+Content-Type: application/json
+
+{
+    "roomType": "VIP-Guest"
+}
+
+### Get all RoomTypes
+GET http://localhost:3000/room-type
+
+
+### Get RoomTypes by id
+GET http://localhost:3000/room-type/2
+
+
+### Update RoomType
+PATCH http://localhost:3000/room-type/2
+Content-Type: application/json
+
+{
+    "roomType": "VIP"
+}

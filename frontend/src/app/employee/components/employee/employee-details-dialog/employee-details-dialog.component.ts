@@ -9,7 +9,7 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['./employee-details-dialog.component.scss'],
 })
 export class EmployeeDetailsDialogComponent implements OnInit {
-  imageUrl = '../../../../../assets/images/default-image.png';
+  imageUrl = '../../../../../assets/images/default-user-image.png';
   employee: Employee;
 
   constructor(

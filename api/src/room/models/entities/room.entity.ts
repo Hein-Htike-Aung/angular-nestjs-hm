@@ -1,3 +1,4 @@
+import { RoomType } from './room-type.entity';
 import { RoomImage } from './room-image.entity';
 import {
   Column,
@@ -5,16 +6,10 @@ import {
   MinKey,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-
-export enum RoomType {
-  Double_Deluxe_Room = 'Double Deluxe Room',
-  VIP_Guest = 'VIP-Guest',
-  VIP = 'VIP',
-  Triple_Room = 'Triple Room',
-  Single_Room = 'Single Room',
-  Twin_Room = 'Twin Room',
-}
 
 export enum RoomStatus {
   AVAILABLE = 'AVAILABLE',
@@ -29,7 +24,7 @@ export class Room {
   @Column({ unique: true })
   room_number: String;
 
-  @Column({ type: 'enum', enum: RoomType })
+  @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
   room_type: RoomType;
 
   @Column()
@@ -44,6 +39,13 @@ export class Room {
   @Column()
   price: number;
 
-  @OneToMany(() => RoomImage, (roomImage) => roomImage.room)
-  roomImages: RoomImage[];
+  @Column({nullable: true})
+  description: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
 }

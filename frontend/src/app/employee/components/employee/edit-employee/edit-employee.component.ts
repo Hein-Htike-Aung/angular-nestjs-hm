@@ -32,7 +32,7 @@ export class EditEmployeeComponent implements OnInit, AfterViewInit {
   divisions: Division[] = [];
   employee: Employee;
 
-  imageUrl = '../../../../../assets/images/default-image.png';
+  imageUrl = '../../../../../assets/images/default-user-image.png';
 
   validFileExtensions: validFileExtension[] = ['png', 'jpg', 'jpeg'];
   validMimeTypes: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
@@ -102,7 +102,7 @@ export class EditEmployeeComponent implements OnInit, AfterViewInit {
         this.employee = null;
         this.basicInfoForm.reset();
         this.personalInfoForm.reset();
-        this.imageUrl = '../../../../../assets/images/default-image.png';
+        this.imageUrl = '../../../../../assets/images/default-user-image.png';
       }
       this.cdr.detectChanges();
     });
@@ -168,7 +168,6 @@ export class EditEmployeeComponent implements OnInit, AfterViewInit {
               }
               // Set formData into FormGroup
               this.personalInfoForm.get('image').setValue(formData);
-              console.log(formData);
 
               // Update UI with uploaded file
               var reader = new FileReader();

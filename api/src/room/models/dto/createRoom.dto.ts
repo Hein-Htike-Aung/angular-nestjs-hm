@@ -7,15 +7,12 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { RoomStatus, RoomType } from './../entities/room.entity';
+import { RoomStatus } from '../entities/room.entity';
 import { CreateRoomImageDto } from './createRoomImage.dto';
 export class CreateRoomDto {
   @IsString()
   @IsNotEmpty()
   room_number: string;
-
-  @IsEnum(RoomType)
-  room_type: RoomType;
 
   @Min(0)
   @IsNumber()
@@ -28,6 +25,7 @@ export class CreateRoomDto {
   bed_numbers: number;
 
   @IsEnum(RoomStatus)
+  @IsNotEmpty()
   room_status: RoomStatus;
 
   @IsString()
@@ -39,6 +37,8 @@ export class CreateRoomDto {
   @IsNotEmpty()
   price: number;
 
-  @IsArray()
-  createRoomImageDto: CreateRoomImageDto[];
+  @IsNumber()
+  @Min(0)
+  @IsNotEmpty()
+  roomTypeId: number;
 }

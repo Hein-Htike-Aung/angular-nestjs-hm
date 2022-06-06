@@ -25,6 +25,20 @@ table {
   width: 100%;
 }
 
+.success-badge {
+  background: green;
+  color: white;
+  padding: 4px;
+  border-radius: 3px;
+}
+.warn-badge {
+  background: crimson;
+  color: white;
+  padding: 4px;
+  border-radius: 3px;
+
+}
+
 a {
   color: #ccc !important;
   text-decoration: none !important;

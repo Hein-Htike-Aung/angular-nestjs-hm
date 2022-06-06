@@ -28,14 +28,6 @@ import { PublicRoute } from '../../shared/decorators/public-route.decorator';
 export class EmployeeController {
   constructor(private employeeService: EmployeeService) {}
 
-  @Patch('update/:id')
-  updateEmployee(
-    @Param('id') id: number,
-    @Body() updateEmployeeDto: UpdateEmployeeDto,
-  ): Observable<Employee> {
-    return this.employeeService.updateEmployee(id, updateEmployeeDto);
-  }
-
   @Post('upload-image/:employeeId')
   @UseInterceptors(FileInterceptor('file', ImageStorage.saveImage()))
   uploadEmployeeImage(
@@ -99,6 +91,15 @@ export class EmployeeController {
     if (!fileName || ['null', '[null]'].includes(fileName)) return;
 
     return res.sendFile(fileName, { root: './images' });
+  }
+
+  
+  @Patch('update/:id')
+  updateEmployee(
+    @Param('id') id: number,
+    @Body() updateEmployeeDto: UpdateEmployeeDto,
+  ): Observable<Employee> {
+    return this.employeeService.updateEmployee(id, updateEmployeeDto);
   }
 
   @Get(':id')

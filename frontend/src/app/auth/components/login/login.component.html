@@ -11,7 +11,7 @@
             </mat-form-field>
             <mat-form-field appearance="standard" color="accent">
                 <mat-label>Password</mat-label>
-                <input type="password" formControlName="password" matInput [errorStateMatcher]="errorMatcher">
+                <input (keyup.enter)="login()" type="password" formControlName="password" matInput [errorStateMatcher]="errorMatcher">
                 <mat-error>
                     Password is required
                 </mat-error>

@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="roomForm">
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Room Number</mat-label>
+      <input
+        type="text"
+        formControlName="room_number"
+        matInput
+        [errorStateMatcher]="errorMatcher"
+      />
+      <mat-error> Room Number is required </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Room Type</mat-label>
+      <mat-select formControlName="roomTypeId">
+        <mat-option>Room Type</mat-option>
+        <mat-option *ngFor="let rt of roomTypes" [value]="rt.id">{{
+          rt.roomType
+        }}</mat-option>
+      </mat-select>
+      <mat-error> RoomType is required </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Room Size</mat-label>
+      <span matPrefix>In Square ft : &nbsp;</span>
+      <input
+        type="number"
+        formControlName="size"
+        matInput
+        [errorStateMatcher]="errorMatcher"
+      />
+      <mat-error *ngIf="roomForm.get('size').hasError('required')"
+        >Room size is required
+      </mat-error>
+      <mat-error *ngIf="roomForm.get('size').hasError('min')"
+        >Room size must be greater than 0</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Bed Numbers</mat-label>
+      <input
+        type="number"
+        formControlName="bed_numbers"
+        matInput
+        [errorStateMatcher]="errorMatcher"
+      />
+      <mat-error *ngIf="roomForm.get('bed_numbers').hasError('required')"
+        >Bed Numbers is required
+      </mat-error>
+      <mat-error *ngIf="roomForm.get('bed_numbers').hasError('min')"
+        >Bed numbers must be greater than 0</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Room Status</mat-label>
+      <mat-select formControlName="room_status">
+        <mat-option [value]="'AVAILABLE'">AVAILABLE</mat-option>
+        <mat-option [value]="'UNAVAILABLE'">UNAVAILABLE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Rate</mat-label>
+      <input
+        type="number"
+        formControlName="price"
+        matInput
+        [errorStateMatcher]="errorMatcher"
+      />
+      <mat-error *ngIf="roomForm.get('price').hasError('required')">
+        Rate is required
+      </mat-error>
+      <mat-error *ngIf="roomForm.get('price').hasError('min')">
+        Rate must be greater than 0</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="standard" color="primary">
+      <mat-label>Description</mat-label>
+      <textarea
+        type="text"
+        formControlName="description"
+        matInput
+        [errorStateMatcher]="errorMatcher"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close mat-dialog-close="true">Close</button>
+  <button [disabled]="roomForm.invalid" (click)="save()" mat-button>
+    Save
+  </button>
+</mat-dialog-actions>

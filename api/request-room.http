@@ -1,0 +1,36 @@
+### Create Room
+POST http://localhost:3000/room
+Content-Type: application/json
+
+{
+    "room_number": "R_005",
+    "size": 35,
+    "bed_numbers": 1,
+    "room_status": "UNAVAILABLE",
+    "description": "Nice",
+    "price": 300,
+    "roomTypeId": 1
+}
+
+### Get All Room
+GET http://localhost:3000/room
+
+
+### Get Room id
+GET http://localhost:3000/room/1
+
+
+### Update Room
+PATCH http://localhost:3000/room/6
+Content-Type: application/json
+
+{
+    "id": 4,
+    "bed_numbers": 2,
+    "description": "Nice",
+    "price": 300,
+    "roomTypeId": 1,
+    "room_number": "R_001",
+    "room_status": "UNAVAILABLE",
+    "size": 35
+}

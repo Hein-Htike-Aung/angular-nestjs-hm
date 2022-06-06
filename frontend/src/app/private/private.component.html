@@ -115,14 +115,14 @@
               ><mat-icon> short_text</mat-icon> Supplier List</a
             >
           </li>
-          <li class="menu">          
+          <li class="menu">
             <a (click)="togglePurchaseMenu()" [routerLink]="['invoice']">
               <div>
                 <mat-icon>short_text</mat-icon>
-              <span class="menu-text">Purchase</span>
-              <mat-icon class="spinner purchase-spinner"
-                >keyboard_arrow_left</mat-icon
-              >
+                <span class="menu-text">Purchase</span>
+                <mat-icon class="spinner purchase-spinner"
+                  >keyboard_arrow_left</mat-icon
+                >
               </div>
             </a>
             <ul class="sub-menu purchase-sub-menu">
@@ -148,15 +148,36 @@
       </li>
 
       <li class="menu">
-        <a>
+        <a
+          (click)="toggleRoomSettingsMenu()"
+          [routerLink]="['room']"
+          routerLinkActive="active"
+        >
           <h2>
             <mat-icon>meeting_room</mat-icon>
-            <span class="menu-text">Rooms</span>
-            <mat-icon style="float: right">keyboard_arrow_left</mat-icon>
+            <span class="menu-text">Room Setting</span>
+            <mat-icon class="spinner room-setting-spinner"
+              >keyboard_arrow_left</mat-icon
+            >
           </h2>
         </a>
-        <ul>
-          <li></li>
+        <ul class="sub-menu rooms-sub-menu">
+          <li>
+            <a
+              [routerLink]="['room/room-type']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Room Types</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['room/rooms']"
+              routerLinkActive="active"
+              class="mat-body-2"
+              ><mat-icon> short_text</mat-icon> Room List</a
+            >
+          </li>
         </ul>
       </li>
       <li class="menu">

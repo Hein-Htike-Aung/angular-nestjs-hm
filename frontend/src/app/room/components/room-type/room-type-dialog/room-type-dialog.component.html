@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="roomTypeForm">
+        <mat-form-field appearance="standard" color="primary">
+            <mat-label>Room Type</mat-label>
+            <input type="text" formControlName="roomType" matInput [errorStateMatcher]="errorMatcher">
+            <mat-error>
+                RoomType is required
+            </mat-error>
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>   
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close mat-dialog-close="true">
+    Close
+  </button>
+  <button [disabled]="roomTypeForm.invalid" (click)="save()" mat-button >Save</button>
+</mat-dialog-actions>

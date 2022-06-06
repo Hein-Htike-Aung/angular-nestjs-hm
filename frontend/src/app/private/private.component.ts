@@ -32,10 +32,15 @@ export class PrivateComponent implements OnInit {
     $('.purchase-spinner').toggleClass('rotate');
   }
 
+  toggleRoomSettingsMenu() {
+    $('.rooms-sub-menu').slideToggle('show');
+    $('.room-setting-spinner').toggleClass('rotate');
+  }
+
   ngOnInit() {
     this.intervalId = setInterval(() => {
       this.time = new Date();
-    }, 1000);    
+    }, 1000);
   }
 
   ngOnDestroy() {
