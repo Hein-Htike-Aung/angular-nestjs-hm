@@ -14,7 +14,7 @@ import { IsNull } from 'typeorm';
 import { ROLE, User } from '../../../auth/models/entities/user.entity';
 import { GENDER } from '../entities/employee.entity';
 
-class ContactInfo {
+export class ContactInfo {
   @IsEmail()
   @IsString()
   @IsNotEmpty()

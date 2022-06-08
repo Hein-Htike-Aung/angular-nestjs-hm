@@ -1,0 +1,18 @@
+### Create Customer
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+    "name": "Customername 2",
+    "profession": "Manager",
+    "nationality": "Foreigner",
+    "contact": {
+        "phone": "0900000000",
+        "email": "cus2@gmial.com"
+    },
+    "address": "Canada",
+    "id_passport": "7/999999"
+}
+
+### Get all Customers
+GET http://localhost:3000/customers

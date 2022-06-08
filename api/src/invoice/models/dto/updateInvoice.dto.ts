@@ -15,32 +15,4 @@ import {
 import { PaymentStatus } from '../entities/invoice.entity';
 import { CreatePurchaseItemDto } from './createPurchaseItem.dto';
 
-export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
-  // @IsDate()
-  // @IsNotEmpty()
-  // @Type(() => Date)
-  // purchaseDate?: Date;
-
-  // @IsNumber()
-  // @IsNotEmpty()
-  // @Min(0)
-  // supplierId?: number;
-
-  // @IsNumber()
-  // @IsNotEmpty()
-  // @Min(0)
-  // employeeId?: number;
-
-  // @IsEnum(PaymentStatus)
-  // @IsNotEmpty()
-  // paymentStatus?: PaymentStatus;
-
-  // @IsString()
-  // @IsOptional()
-  // details?: string;
-
-  // @ValidateNested()
-  // @IsArray()
-  // @Type(() => CreatePurchaseItemDto)
-  // createPurchaseItemDto?: CreatePurchaseItemDto[];
-}
+export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {}

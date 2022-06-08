@@ -1,3 +1,4 @@
+import { Booking } from './../../../booking/models/entities/booking.entity';
 import { RoomType } from './room-type.entity';
 import { RoomImage } from './room-image.entity';
 import {
@@ -10,6 +11,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BookingDetials } from '../../../booking/models/entities/booking-details.entity';
 
 export enum RoomStatus {
   AVAILABLE = 'AVAILABLE',
@@ -41,6 +43,9 @@ export class Room {
 
   @Column({nullable: true})
   description: string;
+
+  @OneToMany(() => BookingDetials, (bookingDetails) => bookingDetails.room)
+  bookingDetails: BookingDetials[];
 
   @CreateDateColumn()
   createdAt: Date;
